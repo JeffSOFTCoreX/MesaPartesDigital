@@ -33,10 +33,10 @@ def main():
             codigo = input("Ingrese el código a buscar: ").strip()
             registro = buscar_documento(registros, codigo)
             if registro:
-                print("\nDocumento encontrado:")
+                print(f"\nDocumento '{codigo}' encontrado:")
                 consultar_documento(registro)
             else:
-                print("No se encontró un documento con ese código.")
+                print(f"No se encontró ningún documento con el código '{codigo}'.")
 
         elif opcion == "3":
             codigo = input("Ingrese el código del documento: ").strip()
@@ -44,7 +44,7 @@ def main():
             if registro:
                 consultar_documento(registro)
             else:
-                print("No se encontró un documento con ese código.")
+                print(f"No se puede consultar: el código '{codigo}' no está registrado.")
 
         elif opcion == "4":
             actualizar_estado(registros)
