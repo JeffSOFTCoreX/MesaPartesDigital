@@ -51,8 +51,12 @@ def main():
 
         elif opcion == "5":
             criterio = input("Ordenar por 'codigo' o 'fecha': ").strip().lower()
-            registros = ordenar_registros(registros, criterio)
-            print("Registros ordenados correctamente.")
+            registros_ordenados = ordenar_registros(registros, criterio)
+
+            if registros_ordenados is not None:
+                registros = registros_ordenados
+                print("Registros ordenados correctamente.")
+
 
         elif opcion == "6":
             guardar_archivo(registros, ARCHIVO_DATOS)

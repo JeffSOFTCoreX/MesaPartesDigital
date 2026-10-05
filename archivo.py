@@ -44,4 +44,9 @@ def ordenar_registros(registros, criterio="codigo"):
 
         return sorted(registros, key=clave_fecha)
 
-    return sorted(registros, key=lambda r: r.get("codigo", "").lower())
+    elif criterio == "codigo":
+        return sorted(registros, key=lambda r: r.get("codigo", "").lower())
+
+    else:
+        print("Criterio no válido. Use 'codigo' o 'fecha'.")
+        return None
