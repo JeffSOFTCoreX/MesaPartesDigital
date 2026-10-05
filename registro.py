@@ -8,7 +8,7 @@ def registrar_documento(registros):
     codigo = input("Código: ").strip()
 
     if buscar_documento(registros, codigo):
-        print("Ya existe un documento registrado con ese código.")
+        print(f"Ya existe un documento registrado con el código '{codigo}'.")
         return False
 
     tipo_documento = input("Tipo de documento: ").strip()
@@ -31,5 +31,5 @@ def registrar_documento(registros):
         return False
 
     registros.append(datos)
-    print("Documento registrado correctamente con estado 'Pendiente'.")
+    print(f"Documento '{codigo}' registrado correctamente con estado '{estado}'.")
     return True
