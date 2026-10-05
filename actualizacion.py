@@ -1,10 +1,25 @@
 from busqueda import buscar_documento
 
 
+ESTADOS = {
+    "1": "Pendiente",
+    "2": "En proceso",
+    "3": "Atendido",
+}
+
+
+def cambiar_estado(registro, opcion):
+    """Cambia el estado del registro si la opción es válida."""
+    if opcion not in ESTADOS:
+        return False
+    registro["estado"] = ESTADOS[opcion]
+    return True
+
+
 def actualizar_estado(registros):
     print("\n--- ACTUALIZACIÓN DE ESTADO ---")
-    codigo = input("Código del documento: ").strip()
 
+    codigo = input("Código del documento: ").strip()
     registro = buscar_documento(registros, codigo)
 
     if not registro:
@@ -18,16 +33,9 @@ def actualizar_estado(registros):
 
     opcion = input("Seleccione el nuevo estado: ").strip()
 
-    estados = {
-        "1": "Pendiente",
-        "2": "En proceso",
-        "3": "Atendido",
-    }
-
-    if opcion not in estados:
+    if not cambiar_estado(registro, opcion):
         print("Opción de estado no válida.")
         return False
 
-    registro["estado"] = estados[opcion]
     print(f"Estado actualizado a '{registro['estado']}'.")
     return True
