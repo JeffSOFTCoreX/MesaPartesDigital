@@ -55,10 +55,12 @@ python main.py
 5. Ordenar registros por código o fecha.
 6. Guardar la información en `documentos.txt`.
 
-## Mejoras propuestas para semana 8 (pendientes de publicar en GitHub)
-- Se corrige `Path.touch()` para crear `documentos.txt` cuando no existe.
-- Se valida que las fechas tengan exactamente dos dígitos para día y mes (`DD/MM/AAAA`).
-- Se añade `pruebas_semana8.py`, una batería de doce pruebas complementarias con datos ficticios.
+## Mejoras implementadas en la semana 8
+
+- Se corrigió el uso de `Path.touch()` para permitir la creación de `documentos.txt` cuando el archivo no existe.
+- Se reforzó la validación de fechas en formato `DD/MM/AAAA`, incluyendo el rechazo de fechas inexistentes.
+- Se incorporó `pruebas_semana8.py`, con doce pruebas adicionales que, junto con las cinco originales, suman 17 pruebas automatizadas satisfactorias.
+- Las mejoras fueron publicadas en GitHub mediante el commit `60a6dfd`.
 
 Ejecutar en el directorio del proyecto:
 
@@ -66,4 +68,4 @@ Ejecutar en el directorio del proyecto:
 python -m unittest pruebas pruebas_semana8 -v
 ```
 
-**Protección de datos:** El archivo `documentos.txt` de esta copia se entrega vacío para no redistribuir registros nominales. Antes de incorporar estos cambios al repositorio, conservar por separado cualquier dato autorizado y usar solo datos ficticios en capturas públicas. No subir expedientes reales al repositorio público.
+**Protección de datos:** El sistema utiliza datos ficticios durante las pruebas para evitar la exposición de información personal. El archivo `documentos.txt` debe mantenerse libre de datos personales reales al compartir el proyecto públicamente. Antes de realizar nuevas publicaciones en GitHub, se recomienda revisar los archivos modificados y verificar que no contengan información confidencial de los usuarios.
