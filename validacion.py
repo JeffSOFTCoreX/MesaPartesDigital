@@ -1,4 +1,5 @@
 from datetime import datetime
+import re
 
 
 def validar_datos(datos):
@@ -14,10 +15,13 @@ def validar_datos(datos):
         if not str(datos.get(campo, "")).strip():
             return False, f"El campo '{campo}' es obligatorio."
 
+    if not re.fullmatch(r"\d{2}/\d{2}/\d{4}", datos["fecha"]):
+        return False, "La fecha debe tener el formato DD/MM/AAAA."
+
     try:
         datetime.strptime(datos["fecha"], "%d/%m/%Y")
     except ValueError:
-        return False, "La fecha debe tener el formato DD/MM/AAAA."
+        return False, "La fecha ingresada no es válida."
 
     estados_permitidos = {"Pendiente", "En proceso", "Atendido"}
     if datos["estado"] not in estados_permitidos:

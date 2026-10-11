@@ -54,3 +54,16 @@ python main.py
 4. Actualizar el estado del trámite.
 5. Ordenar registros por código o fecha.
 6. Guardar la información en `documentos.txt`.
+
+## Mejoras propuestas para semana 8 (pendientes de publicar en GitHub)
+- Se corrige `Path.touch()` para crear `documentos.txt` cuando no existe.
+- Se valida que las fechas tengan exactamente dos dígitos para día y mes (`DD/MM/AAAA`).
+- Se añade `pruebas_semana8.py`, una batería de doce pruebas complementarias con datos ficticios.
+
+Ejecutar en el directorio del proyecto:
+
+```bash
+python -m unittest pruebas pruebas_semana8 -v
+```
+
+**Protección de datos:** El archivo `documentos.txt` de esta copia se entrega vacío para no redistribuir registros nominales. Antes de incorporar estos cambios al repositorio, conservar por separado cualquier dato autorizado y usar solo datos ficticios en capturas públicas. No subir expedientes reales al repositorio público.

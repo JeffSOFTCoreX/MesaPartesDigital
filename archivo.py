@@ -17,7 +17,7 @@ def cargar_archivo(ruta="documentos.txt"):
     archivo = Path(ruta)
 
     if not archivo.exists():
-        archivo.touch(encoding="utf-8")
+        archivo.touch()
         return registros
 
     with open(archivo, "r", encoding="utf-8") as f:
