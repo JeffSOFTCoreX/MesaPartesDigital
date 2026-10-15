@@ -7,6 +7,18 @@ from actualizacion import actualizar_estado
 ARCHIVO_DATOS = "documentos.txt"
 
 
+def guardar_automaticamente(registros):
+    """Guarda los cambios después de un registro o una actualización válidos."""
+    try:
+        guardar_archivo(registros, ARCHIVO_DATOS)
+    except OSError as error:
+        print(f"No se pudieron guardar los cambios: {error}")
+        return False
+
+    print("Cambios guardados automáticamente.")
+    return True
+
+
 def mostrar_menu():
     print("\n=== MESA DE PARTES DIGITAL ===")
     print("1. Registrar documento")
@@ -27,7 +39,8 @@ def main():
         opcion = input("Seleccione una opción: ").strip()
 
         if opcion == "1":
-            registrar_documento(registros)
+            if registrar_documento(registros):
+                guardar_automaticamente(registros)
 
         elif opcion == "2":
             codigo = input("Ingrese el código a buscar: ").strip()
@@ -47,7 +60,8 @@ def main():
                 print(f"No se puede consultar: el código '{codigo}' no está registrado.")
 
         elif opcion == "4":
-            actualizar_estado(registros)
+            if actualizar_estado(registros):
+                guardar_automaticamente(registros)
 
         elif opcion == "5":
             criterio = input("Ordenar por 'codigo' o 'fecha': ").strip().lower()
