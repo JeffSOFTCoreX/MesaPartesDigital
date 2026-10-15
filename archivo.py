@@ -1,6 +1,8 @@
 from datetime import datetime
 from pathlib import Path
 
+from validacion import validar_datos
+
 SEPARADOR = "|"
 CAMPOS = ["codigo", "tipo_documento", "estudiante", "fecha", "estado"]
 
@@ -20,6 +22,8 @@ def cargar_archivo(ruta="documentos.txt"):
         archivo.touch()
         return registros
 
+    omitidos = 0
+    codigos = set()
     with open(archivo, "r", encoding="utf-8") as f:
         for linea in f:
             linea = linea.strip()
@@ -27,10 +31,25 @@ def cargar_archivo(ruta="documentos.txt"):
                 continue
 
             partes = linea.split(SEPARADOR)
+            if len(partes) != len(CAMPOS):
+                omitidos += 1
+                continue
 
-            if len(partes) == len(CAMPOS):
-                registros.append(dict(zip(CAMPOS, partes)))
+            registro = dict(zip(CAMPOS, partes))
+            valido, _ = validar_datos(registro)
+            codigo_normalizado = registro["codigo"].casefold()
+            if not valido or codigo_normalizado in codigos:
+                omitidos += 1
+                continue
 
+            registros.append(registro)
+            codigos.add(codigo_normalizado)
+
+    if omitidos:
+        raise ValueError(
+            f"Se detectaron {omitidos} registro(s) inválido(s) o duplicado(s) en {archivo}. "
+            "Revise el archivo antes de continuar. No se modificaron los datos."
+        )
     return registros
 
 

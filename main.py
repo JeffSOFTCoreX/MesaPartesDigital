@@ -32,7 +32,12 @@ def mostrar_menu():
 
 
 def main():
-    registros = cargar_archivo(ARCHIVO_DATOS)
+    try:
+        registros = cargar_archivo(ARCHIVO_DATOS)
+    except (OSError, UnicodeError, ValueError) as error:
+        print(f"No se pudieron cargar los registros: {error}")
+        print("El programa no se iniciará para evitar sobrescribir los datos existentes.")
+        return
 
     while True:
         mostrar_menu()
@@ -73,16 +78,25 @@ def main():
 
 
         elif opcion == "6":
-            guardar_archivo(registros, ARCHIVO_DATOS)
-            print("Información guardada correctamente.")
+            try:
+                guardar_archivo(registros, ARCHIVO_DATOS)
+            except OSError as error:
+                print(f"No se pudieron guardar los registros: {error}")
+            else:
+                print("Información guardada correctamente.")
 
         elif opcion == "7":
             mostrar_registros(registros)
 
         elif opcion == "8":
-            guardar_archivo(registros, ARCHIVO_DATOS)
-            print("Datos guardados. Programa finalizado.")
-            break
+            try:
+                guardar_archivo(registros, ARCHIVO_DATOS)
+            except OSError as error:
+                print(f"No se pudieron guardar los registros: {error}")
+                print("El programa seguirá abierto para que puedas reintentar.")
+            else:
+                print("Datos guardados. Programa finalizado.")
+                break
 
         else:
             print("Opción no válida. Intente nuevamente.")
