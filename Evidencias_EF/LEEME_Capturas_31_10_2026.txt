@@ -1,0 +1,16 @@
+ACTUALIZACION DE EVIDENCIAS - AVANCE EF / 31-10-2026
+
+Se actualizaron los archivos Informe_EF.docx e Informe_EF.pdf del paquete.
+El apartado 7.2 contiene ahora 16 capturas proporcionadas por el equipo sobre la
+version Python del prototipo: menu, registro, consultas, validaciones, cambios
+de estado, ordenamiento, cierre, listado posterior, 75 pruebas y archivos de datos.
+Se retiraron del apartado 7.2 las capturas antiguas de la evaluacion parcial.
+El capitulo de diseno PSeInt y sus diagramas se conservaron sin recortes.
+
+Las imagenes originales se incluyen en Evidencias_EF/Capturas_Python.
+Los archivos Codigo_Python y PSeInt no se han modificado al hacer esta actualizacion.
+GitHub aun requiere comprobar/publicar la version EF. No se han creado commits.
+
+La opcion 8 (guardado manual), un fallo real de escritura y el aviso de salida
+con cambios pendientes no se muestran en las capturas actuales; no deben
+atribuirse a estas evidencias.
