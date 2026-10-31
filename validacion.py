@@ -15,6 +15,13 @@ def validar_datos(datos):
         if not str(datos.get(campo, "")).strip():
             return False, f"El campo '{campo}' es obligatorio."
 
+    # El formato de texto utiliza | y un registro por línea: no alterar
+    # silenciosamente datos que romperían ese formato al recuperarlos.
+    for campo in campos_obligatorios:
+        valor = str(datos[campo])
+        if any(caracter in valor for caracter in ("|", "\r", "\n", "\t")):
+            return False, f"El campo '{campo}' contiene un carácter no permitido (| o salto/tabulación)."
+
     if not re.fullmatch(r"\d{2}/\d{2}/\d{4}", datos["fecha"]):
         return False, "La fecha debe tener el formato DD/MM/AAAA."
 
