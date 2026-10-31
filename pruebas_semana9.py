@@ -41,7 +41,7 @@ class PruebasGuardadoAutomatico(unittest.TestCase):
             {'codigo': 'DOC-901', 'tipo_documento': 'Constancia',
              'estudiante': 'Ana Ruiz', 'fecha': '14/10/2026', 'estado': 'Pendiente'}
         ], self.ruta)
-        self.ejecutar_hasta_interrupcion(['4', 'DOC-901', '2'])
+        self.ejecutar_hasta_interrupcion(['6', 'DOC-901', '2'])
         registros = cargar_archivo(self.ruta)
         self.assertEqual(registros[0]['estado'], 'En proceso')
 
@@ -57,7 +57,7 @@ class PruebasGuardadoAutomatico(unittest.TestCase):
              'estudiante': 'Ana Ruiz', 'fecha': '14/10/2026', 'estado': 'Pendiente'}
         ], self.ruta)
         original=Path(self.ruta).read_bytes()
-        self.ejecutar_hasta_interrupcion(['4', 'DOC-901', '8'])
+        self.ejecutar_hasta_interrupcion(['6', 'DOC-901', '8'])
         self.assertEqual(Path(self.ruta).read_bytes(),original)
 
     def test_error_de_guardado_se_informa_sin_cerrar_el_programa(self):

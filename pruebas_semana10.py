@@ -50,22 +50,26 @@ class PruebasIntegridadArchivos(unittest.TestCase):
     def test_guardado_manual_informa_error_sin_finalizar(self):
         with patch.object(main, "ARCHIVO_DATOS", str(self.ruta)), \
              patch.object(main, "guardar_archivo", side_effect=[OSError("sin espacio"), None]) as mock_guardado, \
-             patch("builtins.input", side_effect=["6", "8"]), \
+             patch("builtins.input", side_effect=["8", "8", "9"]), \
              contextlib.redirect_stdout(io.StringIO()) as salida:
             main.main()
         self.assertEqual(mock_guardado.call_count, 2)
         self.assertIn("No se pudieron guardar", salida.getvalue())
+        self.assertIn("Información guardada correctamente", salida.getvalue())
         self.assertIn("Programa finalizado", salida.getvalue())
 
-    def test_error_al_salir_permite_reintentar(self):
+    def test_salir_cierra_sin_guardar_ni_modificar_archivo(self):
+        self.escribir("COD-001|Constancia|Ana Ruiz|15/10/2026|Pendiente")
+        original = self.ruta.read_bytes()
         with patch.object(main, "ARCHIVO_DATOS", str(self.ruta)), \
-             patch.object(main, "guardar_archivo", side_effect=[OSError("sin permisos"), None]) as mock_guardado, \
-             patch("builtins.input", side_effect=["8", "8"]), \
+             patch.object(main, "guardar_archivo") as mock_guardado, \
+             patch("builtins.input", side_effect=["9"]), \
              contextlib.redirect_stdout(io.StringIO()) as salida:
             main.main()
-        self.assertEqual(mock_guardado.call_count, 2)
-        self.assertIn("seguirá abierto", salida.getvalue())
+        mock_guardado.assert_not_called()
+        self.assertEqual(self.ruta.read_bytes(), original)
         self.assertIn("Programa finalizado", salida.getvalue())
+        self.assertNotIn("Datos guardados", salida.getvalue())
 
 
 if __name__ == "__main__":
