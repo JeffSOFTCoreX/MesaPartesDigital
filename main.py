@@ -1,5 +1,7 @@
 """Menú principal del prototipo de mesa de partes digital."""
 
+from pathlib import Path
+
 from archivo import cargar_archivo, guardar_archivo, ordenar_registros
 from registro import registrar_documento
 from busqueda import buscar_documento
@@ -8,8 +10,14 @@ from consulta import (
     consultar_pendientes,
 )
 from actualizacion import actualizar_estado
+from autenticacion import iniciar_sesion
 
-ARCHIVO_DATOS = "documentos.txt"
+# Ruta fija junto a main.py: así los expedientes se encuentran sin importar
+# desde qué carpeta se ejecute el programa.
+ARCHIVO_DATOS = str(Path(__file__).resolve().parent / "documentos.txt")
+
+# Valor que devuelve main() cuando el administrador cierra sesión.
+CERRAR_SESION = "cerrar_sesion"
 
 
 def guardar_automaticamente(registros):
@@ -24,20 +32,48 @@ def guardar_automaticamente(registros):
     return True
 
 
+def mostrar_encabezado(registros, usuario=None):
+    """Muestra el encabezado y un resumen actualizado de los expedientes."""
+    total = len(registros)
+    pendientes = sum(r["estado"] == "Pendiente" for r in registros)
+    en_proceso = sum(r["estado"] == "En proceso" for r in registros)
+    atendidos = sum(r["estado"] == "Atendido" for r in registros)
+
+    print("\n" + "=" * 62)
+    print("                 MESA DE PARTES DIGITAL")
+    print("                  ACADEMIA MAGNA PERPETUA")
+    print("=" * 62)
+    if usuario:
+        print(f"  Administrador           : {usuario}")
+    print(f"  Expedientes registrados : {total}")
+    print(f"  Pendientes              : {pendientes}")
+    print(f"  En proceso              : {en_proceso}")
+    print(f"  Atendidos               : {atendidos}")
+    print("-" * 62)
+
+
 def mostrar_menu():
-    print("\n=== MESA DE PARTES DIGITAL ===")
-    print("1. Registrar documento")
-    print("2. Consultar documento por código")
-    print("3. Mostrar todos los registros")
-    print("4. Consultar por tipo y/o estado")
-    print("5. Consultar expedientes pendientes y resumen")
-    print("6. Actualizar estado")
-    print("7. Ordenar registros")
-    print("8. Guardar registros")
-    print("9. Salir")
+    print("\n  MENÚ PRINCIPAL")
+    print("  " + "-" * 40)
+    print("  GESTIÓN DE DOCUMENTOS")
+    print("   [1] Registrar documento")
+    print("   [2] Consultar documento por código")
+    print("   [3] Mostrar todos los registros")
+    print("   [4] Consultar por tipo y/o estado")
+    print("   [5] Consultar expedientes pendientes")
+    print()
+    print("  ADMINISTRACIÓN")
+    print("   [6] Actualizar estado")
+    print("   [7] Ordenar registros")
+    print("   [8] Guardar registros")
+    print()
+    print("   [9] Salir")
+    print("  [10] Cerrar sesión")
+    print("  " + "-" * 40)
 
 
-def main():
+def main(usuario=None):
+    """Menú principal. Devuelve CERRAR_SESION si se eligió la opción 10."""
     try:
         registros = cargar_archivo(ARCHIVO_DATOS)
     except (OSError, UnicodeError, ValueError) as error:
@@ -47,78 +83,111 @@ def main():
 
     cambios_pendientes = False
 
-    while True:
-        mostrar_menu()
-        opcion = input("Seleccione una opción: ").strip()
+    try:
+        while True:
+            mostrar_encabezado(registros, usuario)
+            mostrar_menu()
+            opcion = input("\n  Seleccione una opción: ").strip()
 
-        if opcion == "1":
-            if registrar_documento(registros):
-                cambios_pendientes = True
-                if guardar_automaticamente(registros):
-                    cambios_pendientes = False
-
-        elif opcion == "2":
-            codigo = input("Ingrese el código del documento: ").strip()
-            registro = buscar_documento(registros, codigo)
-            if registro:
-                consultar_documento(registro)
-            else:
-                print(f"No se encontró ningún documento con el código '{codigo}'.")
-
-        elif opcion == "3":
-            mostrar_registros(registros)
-
-        elif opcion == "4":
-            consultar_por_filtros(registros)
-
-        elif opcion == "5":
-            consultar_pendientes(registros)
-
-        elif opcion == "6":
-            if actualizar_estado(registros):
-                cambios_pendientes = True
-                if guardar_automaticamente(registros):
-                    cambios_pendientes = False
-
-        elif opcion == "7":
-            criterio = input("Ordenar por 'codigo' o 'fecha': ").strip().lower()
-            registros_ordenados = ordenar_registros(registros, criterio)
-            if registros_ordenados is not None:
-                cambio_de_orden = registros_ordenados != registros
-                registros = registros_ordenados
-                print("Registros ordenados correctamente.")
-                if cambio_de_orden:
+            if opcion == "1":
+                if registrar_documento(registros):
                     cambios_pendientes = True
                     if guardar_automaticamente(registros):
                         cambios_pendientes = False
 
-        elif opcion == "8":
-            try:
-                guardar_archivo(registros, ARCHIVO_DATOS)
-            except (OSError, UnicodeError, ValueError) as error:
-                print(f"No se pudieron guardar los registros: {error}")
-            else:
-                cambios_pendientes = False
-                print("Información guardada correctamente.")
-
-        elif opcion == "9":
-            if cambios_pendientes:
-                print("ADVERTENCIA: hay cambios sin guardar tras un error de escritura.")
-                decision = input("¿Reintentar el guardado antes de salir? (S/N): ").strip().casefold()
-                if decision in {"s", "si", "sí"}:
-                    if not guardar_automaticamente(registros):
-                        print("El programa seguirá abierto para intentar guardar nuevamente.")
-                        continue
-                    cambios_pendientes = False
+            elif opcion == "2":
+                codigo = input("Ingrese el código del documento: ").strip()
+                registro = buscar_documento(registros, codigo)
+                if registro:
+                    consultar_documento(registro)
                 else:
-                    print("El programa seguirá abierto para evitar la pérdida de cambios.")
-                    continue
-            print("Programa finalizado.")
-            break
+                    print(f"No se encontró ningún documento con el código '{codigo}'.")
 
-        else:
-            print("Opción no válida. Intente nuevamente.")
+            elif opcion == "3":
+                mostrar_registros(registros)
+
+            elif opcion == "4":
+                consultar_por_filtros(registros)
+
+            elif opcion == "5":
+                consultar_pendientes(registros)
+
+            elif opcion == "6":
+                if actualizar_estado(registros):
+                    cambios_pendientes = True
+                    if guardar_automaticamente(registros):
+                        cambios_pendientes = False
+
+            elif opcion == "7":
+                criterio = input("Ordenar por 'codigo' o 'fecha': ").strip().lower()
+                registros_ordenados = ordenar_registros(registros, criterio)
+                if registros_ordenados is not None:
+                    cambio_de_orden = registros_ordenados != registros
+                    registros = registros_ordenados
+                    print("Registros ordenados correctamente.")
+                    if cambio_de_orden:
+                        cambios_pendientes = True
+                        if guardar_automaticamente(registros):
+                            cambios_pendientes = False
+
+            elif opcion == "8":
+                try:
+                    guardar_archivo(registros, ARCHIVO_DATOS)
+                except (OSError, UnicodeError, ValueError) as error:
+                    print(f"No se pudieron guardar los registros: {error}")
+                else:
+                    cambios_pendientes = False
+                    print("Información guardada correctamente.")
+
+            elif opcion in {"9", "10"}:
+                if cambios_pendientes:
+                    print("ADVERTENCIA: hay cambios sin guardar tras un error de escritura.")
+                    decision = input("¿Reintentar el guardado antes de salir? (S/N): ").strip().casefold()
+                    if decision in {"s", "si", "sí"}:
+                        if not guardar_automaticamente(registros):
+                            print("El programa seguirá abierto para intentar guardar nuevamente.")
+                            continue
+                        cambios_pendientes = False
+                    else:
+                        print("El programa seguirá abierto para evitar la pérdida de cambios.")
+                        continue
+                if opcion == "10":
+                    print("Sesión cerrada.")
+                    return CERRAR_SESION
+                print("Programa finalizado.")
+                break
+
+            else:
+                print("Opción no válida. Intente nuevamente.")
+
+    except EOFError:
+        # Fin de la entrada (Ctrl+D / Ctrl+Z): salida ordenada, sin traceback.
+        print("\nEntrada finalizada.")
+        if cambios_pendientes:
+            guardar_automaticamente(registros)
+        print("Programa finalizado.")
+
+
+def ejecutar():
+    """Punto de entrada: inicio de sesión del administrador y luego el menú.
+
+    Al cerrar sesión se vuelve a pedir usuario y contraseña. Ctrl+C / Ctrl+D
+    salen con un mensaje en lugar de un traceback.
+    """
+    try:
+        while True:
+            usuario = iniciar_sesion()
+            if usuario is None:
+                print("Programa finalizado.")
+                return
+            if main(usuario) != CERRAR_SESION:
+                return
+    except KeyboardInterrupt:
+        print("\nPrograma interrumpido por el usuario.")
+    except EOFError:
+        print("\nEntrada finalizada.")
+        print("Programa finalizado.")
 
 
 if __name__ == "__main__":
-    main()
+    ejecutar()
