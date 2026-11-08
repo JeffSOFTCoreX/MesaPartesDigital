@@ -1,0 +1,4 @@
+Estas imágenes son capturas directas de una ventana Xterm durante la ejecución real del programa integrado.
+No son diseños ni reconstrucciones.
+Se usaron una cuenta temporal y datos ficticios; se eliminaron credenciales y documentos al terminar.
+La captura 03 muestra la pantalla real de selección de estado; no se presenta como confirmación del cambio.
