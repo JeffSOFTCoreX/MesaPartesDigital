@@ -1,62 +1,53 @@
 # Informe final de pruebas e integración
 
-**Proyecto:** Mesa de Partes Digital  
-**Responsable:** Integrante 3 — Pruebas e integración final  
-**Fecha:** 08/11/2026
+- **Proyecto:** Mesa de Partes Digital
+- **Responsable:** Integrante 3 — Pruebas e integración final
+- **Fecha de validación final:** 09/11/2026
+- **Rama validada:** `main`
+- **Commit final validado:** `ae08ba8645a32ca4424f0ec8136c8ef58ef57492`
 
-## 1. Alcance
+## 1. Alcance y secuencia de integración
 
-Se revisó el proyecto base, el avance del integrante 1 y el avance del integrante 2. La entrega final conserva la estructura del proyecto y reúne la autenticación del administrador con las correcciones de revisión del sistema.
+Se verificó la integración final del trabajo de autenticación, revisión y correcciones del proyecto. La secuencia de los Pull Requests fue:
 
-La copia original se mantuvo separada y sin modificaciones. La integración se realizó en una copia de trabajo independiente.
-
-## 2. Cambios integrados
-
-El integrante 2 incorporó correcciones en `main.py`, `archivo.py`, `actualizacion.py` y `validacion.py`. Estas correcciones fijan la ruta de datos junto al programa, permiten leer archivos con BOM, evitan reescribir cuando el estado no cambia, manejan la salida por Ctrl+D/Ctrl+C y restringen las fechas a dígitos ASCII.
-
-El integrante 1 incorporó `autenticacion.py`, integró el inicio de sesión en `main.py`, añadió el cierre de sesión como opción 10, agregó `pruebas_autenticacion.py` y actualizó la configuración para ignorar `credenciales.json`. La contraseña se almacena como hash PBKDF2-HMAC-SHA256 con sal aleatoria; no se guarda en texto plano.
-
-La entrega del integrante 1 fue construida sobre la versión corregida del integrante 2. Se verificó que sus archivos Python compartieran las correcciones del integrante 2 y que las diferencias adicionales correspondieran a autenticación y a sus pruebas de integración.
-
-## 3. Resultados de pruebas automatizadas
-
-| Prueba | Resultado | Observación |
+| PR | Resultado | Commit de merge |
 |---|---|---|
-| Suite original | APROBADA | 75 pruebas ejecutadas. |
-| Revisión del sistema | APROBADA | 8 pruebas nuevas del integrante 2. |
-| Autenticación | APROBADA | 31 pruebas nuevas del integrante 1. |
-| Integración completa | APROBADA | 114 pruebas ejecutadas en total. |
-| Sintaxis Python | APROBADA | Compilación de módulos completada sin errores. |
+| [#5 — Integrante 2](https://github.com/JeffSOFTCoreX/MesaPartesDigital/pull/5) | Merged primero, 09/11/2026 14:27 UTC | `f27bf6e52ec2bd7a41c34491b75043f5d937f119` |
+| [#4 — Integrante 1: autenticación](https://github.com/JeffSOFTCoreX/MesaPartesDigital/pull/4) | Merged después del #5, 09/11/2026 14:32 UTC | `9657e82ba1bc23eb718ac0f5c8a3d87d2f9ad81d` |
+| [#7 — integración y pruebas finales](https://github.com/JeffSOFTCoreX/MesaPartesDigital/pull/7) | Merged, 09/11/2026 14:40 UTC | `ae08ba8645a32ca4424f0ec8136c8ef58ef57492` |
 
-Resultado real de la ejecución integrada:
+La rama `main` se descargó nuevamente después del merge del PR #7. El `HEAD` obtenido coincidió con el commit de merge final indicado arriba; la copia quedó limpia antes de la validación.
+
+## 2. Correcciones de integración incluidas
+
+La revisión final del PR #7 recuperó la implementación completa de `main.py`, incluida la lógica del menú y la función `ejecutar()`, corrigió la indentación de `pruebas_revision.py` y conserva la llamada `mostrar_registros(registros)` después de ordenar los documentos. La autenticación y las correcciones previas de revisión permanecen integradas.
+
+## 3. Pruebas ejecutadas sobre el commit final
+
+Los siguientes comandos se ejecutaron desde la copia recién descargada de `main` en el commit `ae08ba8645a32ca4424f0ec8136c8ef58ef57492`:
+
+```bash
+python3 -m py_compile main.py pruebas_revision.py
+python3 -m unittest discover -p "pruebas*.py" -v
+```
+
+**Resultado de sintaxis:** compilación completada con código de salida 0.
+
+**Resultado de pruebas:** 142 aprobadas, 0 fallos y 0 errores.
 
 ```text
-Ran 114 tests in 0.620s
+Ran 142 tests in 0.615s
 OK
 ```
 
-## 4. Validación funcional
+La ejecución detallada de todos los casos está en `00_resultado_pruebas_automatizadas.txt`. Las capturas `07_compilacion_main_ae08ba8.png` y `08_pruebas_142_main_ae08ba8.png` son capturas directas de Xterm con fondo blanco, tomadas con Xvfb y Scrot; muestran el hash validado, los comandos y los resultados.
 
-Se generaron registros de evidencia separados para el inicio de sesión correcto, rechazo de credenciales y límite de tres intentos, cierre y reingreso de sesión, registro de expediente, búsqueda por código, actualización de estado y recuperación de datos después del reinicio.
+## 4. Tratamiento de evidencias anteriores
 
-Los escenarios funcionales utilizaron datos ficticios. La evidencia de persistencia confirmó la recuperación de un expediente con estado `En proceso` después de cerrar el programa.
+`HISTORICA_06_resultado_114_pruebas_2026-11-09.png` se conserva únicamente como registro de la ejecución anterior de 114 pruebas, previa al merge final del PR #7. **No debe presentarse como resultado de la versión final.** El archivo `00_resultado_pruebas_automatizadas.txt` se reemplazó por el registro completo de 142 pruebas sobre el hash final.
 
-## 5. Archivos de evidencia
+Las capturas funcionales `01_login_menu.png` a `05_bloqueo.png` pertenecen a la ronda previa de evidencias funcionales; son ilustrativas de esos flujos y no sustituyen la validación de la revisión final. La evidencia de resultado final está en el archivo actualizado y en las capturas 07 y 08.
 
-El paquete separado de evidencias contiene:
+## 5. Conclusión
 
-- Resultado completo de las 114 pruebas.
-- Inicio de sesión correcto y acceso al menú.
-- Rechazo de credenciales y bloqueo después de tres intentos.
-- Cierre de sesión y reingreso.
-- Registro, búsqueda y actualización de un expediente.
-- Recuperación de información después del reinicio.
-- Esta matriz y este informe.
-
-## 6. Observación para la entrega
-
-Las capturas antiguas incluidas en los paquetes de los integrantes muestran el menú de 9 opciones y 75 pruebas. Después de la integración, la versión actual tiene 10 opciones porque incluye `Cerrar sesión` y cuenta con 114 pruebas. Por eso, para la evidencia final se deben utilizar los registros generados en este paquete y no presentar las capturas antiguas como si reflejaran la versión final.
-
-## 7. Conclusión
-
-La integración queda validada técnicamente en la copia final: las funciones existentes se conservan, la autenticación se ejecuta antes del menú, el cierre de sesión funciona, las credenciales incorrectas son rechazadas con límite de intentos y las 114 pruebas automatizadas terminan correctamente.
+La rama `main` del proyecto fue validada en el commit `ae08ba8645a32ca4424f0ec8136c8ef58ef57492`. La compilación pasó y las 142 pruebas automatizadas terminaron con `OK`. Este informe y las evidencias actualizadas se preparan exclusivamente en la rama del PR #3; no se hizo push directo a `main` ni se modificó el código funcional del proyecto para actualizar las evidencias.

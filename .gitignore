@@ -8,3 +8,5 @@ venv/
 # Archivo local generado por la aplicación
 # Si ya está versionado, usar: git rm --cached documentos.txt
 documentos.txt
+credenciales.json
+.credenciales.json*.tmp

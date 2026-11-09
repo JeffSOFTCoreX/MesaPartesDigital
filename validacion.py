@@ -2,6 +2,17 @@ from datetime import datetime
 import re
 
 
+LONGITUD_MAXIMA = 100
+
+
+def validar_longitudes(datos, maximo=LONGITUD_MAXIMA):
+    """Límite de longitud para registros nuevos (no se usa al cargar archivos)."""
+    for campo, valor in datos.items():
+        if len(str(valor)) > maximo:
+            return False, f"El campo '{campo}' supera los {maximo} caracteres permitidos."
+    return True, "Longitudes válidas."
+
+
 def validar_datos(datos):
     campos_obligatorios = [
         "codigo",
