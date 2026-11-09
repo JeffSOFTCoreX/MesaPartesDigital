@@ -1,5 +1,6 @@
 """Menú principal del prototipo de mesa de partes digital."""
 
+import sys
 from pathlib import Path
 
 from archivo import cargar_archivo, guardar_archivo, ordenar_registros
@@ -18,6 +19,9 @@ ARCHIVO_DATOS = str(Path(__file__).resolve().parent / "documentos.txt")
 
 # Valor que devuelve main() cuando el administrador cierra sesión.
 CERRAR_SESION = "cerrar_sesion"
+# Valor que devuelve main() cuando el programa termina sin poder persistir
+# los datos (no es una salida normal: ejecutar() la convierte en código 1).
+ERROR_PERSISTENCIA = "error_persistencia"
 
 
 def guardar_automaticamente(registros):
@@ -30,6 +34,25 @@ def guardar_automaticamente(registros):
 
     print("Cambios guardados automáticamente.")
     return True
+
+
+def resolver_cambios_pendientes(registros):
+    """Último intento de guardado al salir con cambios sin persistir.
+
+    Devuelve True solo si se guardó. Si falla (o se interrumpe el reintento),
+    informa claramente que los cambios NO quedaron guardados.
+    """
+    print("Hay cambios sin guardar. Reintentando el guardado antes de salir...")
+    try:
+        guardado = guardar_automaticamente(registros)
+    except KeyboardInterrupt:
+        print("Reintento de guardado interrumpido.")
+        guardado = False
+    if not guardado:
+        print("ERROR: los cambios recientes NO se guardaron en "
+              f"'{ARCHIVO_DATOS}'.")
+        print("Revise el archivo o la carpeta y vuelva a registrar esos cambios.")
+    return guardado
 
 
 def mostrar_encabezado(registros, usuario=None):
@@ -73,13 +96,17 @@ def mostrar_menu():
 
 
 def main(usuario=None):
-    """Menú principal. Devuelve CERRAR_SESION si se eligió la opción 10."""
+    """Menú principal.
+
+    Devuelve None en una salida normal, CERRAR_SESION si se eligió la opción 10
+    y ERROR_PERSISTENCIA si el programa terminó sin poder guardar los datos.
+    """
     try:
         registros = cargar_archivo(ARCHIVO_DATOS)
     except (OSError, UnicodeError, ValueError) as error:
         print(f"No se pudieron cargar los registros: {error}")
         print("El programa no se iniciará para evitar sobrescribir los datos existentes.")
-        return
+        return ERROR_PERSISTENCIA
 
     cambios_pendientes = False
 
@@ -163,31 +190,43 @@ def main(usuario=None):
     except EOFError:
         # Fin de la entrada (Ctrl+D / Ctrl+Z): salida ordenada, sin traceback.
         print("\nEntrada finalizada.")
-        if cambios_pendientes:
-            guardar_automaticamente(registros)
+        if cambios_pendientes and not resolver_cambios_pendientes(registros):
+            print("Programa finalizado con errores.")
+            return ERROR_PERSISTENCIA
         print("Programa finalizado.")
+    except KeyboardInterrupt:
+        # Ctrl+C: si hay cambios pendientes se reintenta guardar; si falla se
+        # informa. Sin pendientes (o con guardado correcto) se propaga para que
+        # ejecutar() muestre el aviso de interrupción.
+        if cambios_pendientes and not resolver_cambios_pendientes(registros):
+            print("Programa finalizado con errores.")
+            return ERROR_PERSISTENCIA
+        raise
 
 
 def ejecutar():
     """Punto de entrada: inicio de sesión del administrador y luego el menú.
 
     Al cerrar sesión se vuelve a pedir usuario y contraseña. Ctrl+C / Ctrl+D
-    salen con un mensaje en lugar de un traceback.
+    salen con un mensaje en lugar de un traceback. Devuelve el código de
+    salida: 0 si fue normal y 1 si no se pudieron guardar los cambios.
     """
     try:
         while True:
             usuario = iniciar_sesion()
             if usuario is None:
                 print("Programa finalizado.")
-                return
-            if main(usuario) != CERRAR_SESION:
-                return
+                return 0
+            resultado = main(usuario)
+            if resultado != CERRAR_SESION:
+                return 1 if resultado == ERROR_PERSISTENCIA else 0
     except KeyboardInterrupt:
         print("\nPrograma interrumpido por el usuario.")
     except EOFError:
         print("\nEntrada finalizada.")
         print("Programa finalizado.")
+    return 0
 
 
 if __name__ == "__main__":
-    ejecutar()
+    sys.exit(ejecutar())

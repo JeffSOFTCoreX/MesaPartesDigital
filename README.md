@@ -34,6 +34,7 @@ MesaPartesDigital/
 ├── actualizacion.py       # Cambios de estado
 ├── archivo.py             # Lectura, validación, ordenamiento y guardado
 ├── pruebas_autenticacion.py # 31 pruebas de inicio y cierre de sesión
+├── pruebas_cierre.py      # 11 pruebas de cierre con cambios pendientes (Ctrl+C / fin de entrada)
 ├── pruebas_revision.py    # 8 pruebas de la revisión y corrección de errores
 ├── pruebas_menu.py        # 2 pruebas de consulta unificada
 ├── pruebas_filtros.py     # 21 pruebas de filtros e integración
@@ -99,7 +100,9 @@ python -m unittest discover -p "pruebas*.py" -v
 | `pruebas_avance_ef.py` | 14 |
 | `pruebas_revision.py` | 8 |
 | `pruebas_autenticacion.py` | 31 |
-| **Total con autenticación (Integrante 1)** | **114** |
+| `pruebas_cierre.py` | 11 |
+
+El total de pruebas depende de las ramas integradas, por lo que no se fija aquí: se obtiene al ejecutar el comando anterior y su resultado real (cantidad, commit y `OK`) se registra en las evidencias de la integración final.
 
 La ejecución documentada para la Evaluación Parcial terminó con **28 pruebas aprobadas (`OK`)**. Entre otras situaciones, se comprueban la validación de fechas, los códigos duplicados, el guardado automático, la recuperación de expedientes y el manejo de errores de archivo.
 
@@ -179,6 +182,7 @@ Al ejecutar `main.py` se solicita usuario y contraseña **antes** de mostrar el 
 - **Almacenamiento seguro:** la contraseña no está en el código ni se guarda en texto plano. Se guarda en `credenciales.json` (junto a `main.py`) solo el hash PBKDF2-HMAC-SHA256 (200 000 iteraciones) con una sal aleatoria. El archivo está en `.gitignore`.
 - **Límite de intentos:** 3 intentos por inicio de sesión; al agotarse, el programa termina. El mensaje de error es el mismo si falla el usuario o la contraseña.
 - **Cerrar sesión:** opción **10** del menú. Vuelve a pedir credenciales; los expedientes se conservan.
+- **Salida con cambios sin guardar:** si el guardado automático falló y se sale con Ctrl+C o con fin de entrada, el programa reintenta guardar. Si vuelve a fallar, muestra `ERROR: los cambios recientes NO se guardaron`, termina con `Programa finalizado con errores.` y devuelve el código de salida 1 (no se presenta como una salida normal).
 - **Contraseña olvidada:** borrar `credenciales.json` y volver a configurar la cuenta (los expedientes no se modifican).
 
 **Límites:** hay un solo administrador, sin roles. El bloqueo por intentos vale por ejecución del programa (no persiste si se reinicia). Quien tenga acceso al equipo puede borrar `credenciales.json`; es una protección de acceso al programa, no cifrado de `documentos.txt`.
