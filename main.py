@@ -100,8 +100,7 @@ def main(usuario=None):
 
     Devuelve None en una salida normal, CERRAR_SESION si se eligió la opción 10
     y ERROR_PERSISTENCIA si el programa terminó sin poder guardar los datos.
-    """
-    try:
+    """    try:
         registros = cargar_archivo(ARCHIVO_DATOS)
     except (OSError, UnicodeError, ValueError) as error:
         print(f"No se pudieron cargar los registros: {error}")
@@ -115,7 +114,6 @@ def main(usuario=None):
             mostrar_encabezado(registros, usuario)
             mostrar_menu()
             opcion = input("\n  Seleccione una opción: ").strip()
-
             if opcion == "1":
                 if registrar_documento(registros):
                     cambios_pendientes = True
@@ -139,9 +137,15 @@ def main(usuario=None):
             elif opcion == "5":
                 consultar_pendientes(registros)
 
-            elif opcion == "6":
-                if actualizar_estado(registros):
-                    cambios_pendientes = True
+        elif opcion == "7":
+            criterio = input("Ordenar por 'codigo' o 'fecha': ").strip().lower()
+            registros_ordenados = ordenar_registros(registros, criterio)
+            if registros_ordenados is not None:
+                cambio_de_orden = registros_ordenados != registros
+                registros = registros_ordenados
+                print("Registros ordenados correctamente.")
+                mostrar_registros(registros)
+                if cambio_de_orden:                    cambios_pendientes = True
                     if guardar_automaticamente(registros):
                         cambios_pendientes = False
 
@@ -226,6 +230,16 @@ def ejecutar():
         print("\nEntrada finalizada.")
         print("Programa finalizado.")
     return 0
+
+
+def ejecutar():
+    """Punto de entrada: Ctrl+C / Ctrl+D salen con un mensaje, sin traceback."""
+    try:
+        main()
+    except EOFError:
+        print("\nEntrada finalizada. Programa finalizado.")
+    except KeyboardInterrupt:
+        print("\nPrograma interrumpido por el usuario.")
 
 
 if __name__ == "__main__":

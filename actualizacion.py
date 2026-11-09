@@ -33,6 +33,10 @@ def actualizar_estado(registros):
 
     opcion = input("Seleccione el nuevo estado: ").strip()
 
+    if opcion in ESTADOS and registro["estado"] == ESTADOS[opcion]:
+        print(f"El documento ya está en estado '{registro['estado']}'. No hay cambios.")
+        return False
+
     if not cambiar_estado(registro, opcion):
         print("Opción de estado no válida.")
         return False

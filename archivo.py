@@ -1,9 +1,11 @@
 from datetime import datetime
 from pathlib import Path
 import os
+import re
 import tempfile
 
 from validacion import validar_datos
+from normalizacion import clave_codigo
 
 SEPARADOR = "|"
 CAMPOS = ["codigo", "tipo_documento", "estudiante", "fecha", "estado"]
@@ -49,7 +51,7 @@ def guardar_archivo(registros, ruta="documentos.txt"):
         valido, mensaje = validar_datos(registro)
         if not valido:
             raise ValueError(f"Registro {numero} inválido: {mensaje}")
-        codigo = registro["codigo"].strip().casefold()
+        codigo = clave_codigo(registro["codigo"])
         if codigo in codigos:
             raise ValueError(f"Código duplicado en el registro {numero}: {registro['codigo']}")
         codigos.add(codigo)
@@ -70,6 +72,23 @@ def guardar_archivo(registros, ruta="documentos.txt"):
         _eliminar_temporal(temporal_respaldo)
 
 
+ESTADOS_VALIDOS = ("Pendiente", "En proceso", "Atendido")
+
+
+def _estado_canonico(estado):
+    """Devuelve el estado con su escritura oficial si coincide sin distinguir mayúsculas."""
+    limpio = " ".join(estado.split())
+    for oficial in ESTADOS_VALIDOS:
+        if limpio.casefold() == oficial.casefold():
+            return oficial
+    return estado
+
+
+def _clave_natural(texto):
+    """Orden natural: EXP2 va antes que EXP10."""
+    return [int(t) if t.isdigit() else t for t in re.split(r"(\d+)", texto.strip().casefold())]
+
+
 def cargar_archivo(ruta="documentos.txt"):
     registros = []
     archivo = Path(ruta)
@@ -80,7 +99,7 @@ def cargar_archivo(ruta="documentos.txt"):
 
     omitidos = 0
     codigos = set()
-    with open(archivo, "r", encoding="utf-8") as f:
+    with open(archivo, "r", encoding="utf-8-sig") as f:  # tolera BOM de Windows
         for linea in f:
             linea = linea.strip()
             if not linea:
@@ -91,11 +110,15 @@ def cargar_archivo(ruta="documentos.txt"):
                 omitidos += 1
                 continue
 
-            registro = dict(zip(CAMPOS, partes))
+            # Tolera archivos editados a mano: espacios alrededor de | y
+            # estado escrito en minúsculas ("pendiente").
+            registro = {campo: valor.strip() for campo, valor in zip(CAMPOS, partes)}
+            registro["estado"] = _estado_canonico(registro["estado"])
             valido, _ = validar_datos(registro)
-            # El código tiene la misma normalización en carga, registro y búsqueda.
+            # Misma regla de comparación de códigos en carga, registro y búsqueda
+            # (normalizacion.clave_codigo). El valor guardado no se altera.
             registro["codigo"] = registro["codigo"].strip()
-            codigo_normalizado = registro["codigo"].casefold()
+            codigo_normalizado = clave_codigo(registro["codigo"])
             if not valido or codigo_normalizado in codigos:
                 omitidos += 1
                 continue
@@ -122,7 +145,7 @@ def ordenar_registros(registros, criterio="codigo"):
         return sorted(registros, key=clave_fecha)
 
     elif criterio == "codigo":
-        return sorted(registros, key=lambda r: r.get("codigo", "").strip().casefold())
+        return sorted(registros, key=lambda r: _clave_natural(r.get("codigo", "")))
 
     else:
         print("Criterio no válido. Use 'codigo' o 'fecha'.")

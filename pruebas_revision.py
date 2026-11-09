@@ -80,8 +80,7 @@ class PruebasRevision(unittest.TestCase):
         registros = cargar_archivo(str(self.ruta))
         self.assertEqual([r["codigo"] for r in registros], ["A1"])
 
-    def test_fecha_con_digitos_no_ascii_se_rechaza(self):
-        datos = {"codigo": "A1", "tipo_documento": "T", "estudiante": "E",
+    def test_fecha_con_digitos_no_ascii_se_rechaza(self):        datos = {"codigo": "A1", "tipo_documento": "T", "estudiante": "E",
                  "fecha": "١٢/٠١/٢٠٢٦", "estado": "Pendiente"}
         self.assertFalse(validar_datos(datos)[0])
 

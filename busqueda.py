@@ -1,8 +1,11 @@
+from normalizacion import clave_codigo
+
+
 def buscar_documento(registros, codigo):
-    codigo = codigo.strip().casefold()
+    codigo = clave_codigo(codigo)
 
     for registro in registros:
-        if registro.get("codigo", "").strip().casefold() == codigo:
+        if clave_codigo(registro.get("codigo", "")) == codigo:
             return registro
 
     return None
