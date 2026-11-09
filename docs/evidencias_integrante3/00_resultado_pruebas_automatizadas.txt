@@ -1,0 +1,185 @@
+MESA DE PARTES DIGITAL — RESULTADO COMPLETO DE PRUEBAS
+Fecha: 09/11/2026
+Rama validada: main
+Commit final: ae08ba8645a32ca4424f0ec8136c8ef58ef57492
+Secuencia de integración verificada: PR #5 → PR #4 → PR #7
+
+Comandos ejecutados sobre una descarga limpia de main:
+  python3 -m py_compile main.py pruebas_revision.py
+  python3 -m unittest discover -p "pruebas*.py" -v
+
+Compilación: código de salida 0.
+Resultado de unittest: 142 casos aprobados; 0 fallos; 0 errores.
+
+----- SALIDA DETALLADA DE unittest -v -----
+test_cambiar_estado_directo (pruebas.PruebasActualizacionEstado.test_cambiar_estado_directo) ... ok
+test_cambio_pendiente_a_en_proceso (pruebas.PruebasActualizacionEstado.test_cambio_pendiente_a_en_proceso) ... ok
+test_codigo_inexistente (pruebas.PruebasActualizacionEstado.test_codigo_inexistente) ... ok
+test_estados_definidos (pruebas.PruebasActualizacionEstado.test_estados_definidos) ... ok
+test_seleccion_invalida_no_cambia_estado (pruebas.PruebasActualizacionEstado.test_seleccion_invalida_no_cambia_estado) ... ok
+test_cambiar_cuenta_con_contrasena_actual_correcta (pruebas_autenticacion.PruebasConfiguracion.test_cambiar_cuenta_con_contrasena_actual_correcta) ... ok
+test_cambiar_cuenta_exige_la_contrasena_actual (pruebas_autenticacion.PruebasConfiguracion.test_cambiar_cuenta_exige_la_contrasena_actual) ... ok
+test_confirmacion_distinta_no_guarda_nada (pruebas_autenticacion.PruebasConfiguracion.test_confirmacion_distinta_no_guarda_nada) ... ok
+test_archivo_con_campos_faltantes_lanza_error (pruebas_autenticacion.PruebasHash.test_archivo_con_campos_faltantes_lanza_error) ... ok
+test_archivo_danado_lanza_error (pruebas_autenticacion.PruebasHash.test_archivo_danado_lanza_error) ... ok
+test_archivo_inexistente_devuelve_none (pruebas_autenticacion.PruebasHash.test_archivo_inexistente_devuelve_none) ... ok
+test_contrasena_corta_se_rechaza (pruebas_autenticacion.PruebasHash.test_contrasena_corta_se_rechaza) ... ok
+test_contrasena_distingue_mayusculas (pruebas_autenticacion.PruebasHash.test_contrasena_distingue_mayusculas) ... ok
+test_credenciales_correctas_se_verifican (pruebas_autenticacion.PruebasHash.test_credenciales_correctas_se_verifican) ... ok
+test_la_contrasena_no_se_guarda_en_texto_plano (pruebas_autenticacion.PruebasHash.test_la_contrasena_no_se_guarda_en_texto_plano) ... ok
+test_misma_contrasena_genera_hash_distinto_por_la_sal (pruebas_autenticacion.PruebasHash.test_misma_contrasena_genera_hash_distinto_por_la_sal) ... ok
+test_usuario_incorrecto_con_clave_correcta_se_rechaza (pruebas_autenticacion.PruebasHash.test_usuario_incorrecto_con_clave_correcta_se_rechaza) ... ok
+test_usuario_no_distingue_mayusculas_ni_espacios (pruebas_autenticacion.PruebasHash.test_usuario_no_distingue_mayusculas_ni_espacios) ... ok
+test_usuario_vacio_se_rechaza (pruebas_autenticacion.PruebasHash.test_usuario_vacio_se_rechaza) ... ok
+test_con_clave_correcta_en_el_tercer_intento_entra (pruebas_autenticacion.PruebasInicioSesion.test_con_clave_correcta_en_el_tercer_intento_entra) ... ok
+test_credenciales_correctas_conceden_acceso (pruebas_autenticacion.PruebasInicioSesion.test_credenciales_correctas_conceden_acceso) ... ok
+test_credenciales_danadas_deniegan_el_acceso (pruebas_autenticacion.PruebasInicioSesion.test_credenciales_danadas_deniegan_el_acceso) ... ok
+test_credenciales_incorrectas_rechazan_el_acceso (pruebas_autenticacion.PruebasInicioSesion.test_credenciales_incorrectas_rechazan_el_acceso) ... ok
+test_el_mensaje_no_revela_si_falla_usuario_o_contrasena (pruebas_autenticacion.PruebasInicioSesion.test_el_mensaje_no_revela_si_falla_usuario_o_contrasena) ... ok
+test_limite_de_intentos_configurable (pruebas_autenticacion.PruebasInicioSesion.test_limite_de_intentos_configurable) ... ok
+test_no_pide_un_cuarto_intento (pruebas_autenticacion.PruebasInicioSesion.test_no_pide_un_cuarto_intento) ... ok
+test_primera_ejecucion_permite_crear_la_cuenta_e_ingresar (pruebas_autenticacion.PruebasInicioSesion.test_primera_ejecucion_permite_crear_la_cuenta_e_ingresar) ... ok
+test_se_bloquea_tras_tres_intentos_fallidos (pruebas_autenticacion.PruebasInicioSesion.test_se_bloquea_tras_tres_intentos_fallidos) ... ok
+test_sin_cuenta_y_sin_crearla_no_hay_acceso (pruebas_autenticacion.PruebasInicioSesion.test_sin_cuenta_y_sin_crearla_no_hay_acceso) ... ok
+test_cerrar_sesion_permite_volver_a_entrar (pruebas_autenticacion.PruebasIntegracionMain.test_cerrar_sesion_permite_volver_a_entrar) ... ok
+test_cerrar_sesion_vuelve_al_login_y_no_al_menu (pruebas_autenticacion.PruebasIntegracionMain.test_cerrar_sesion_vuelve_al_login_y_no_al_menu) ... ok
+test_con_credenciales_correctas_se_muestra_el_menu_y_el_usuario (pruebas_autenticacion.PruebasIntegracionMain.test_con_credenciales_correctas_se_muestra_el_menu_y_el_usuario) ... ok
+test_ctrl_d_en_el_login_sale_sin_traceback (pruebas_autenticacion.PruebasIntegracionMain.test_ctrl_d_en_el_login_sale_sin_traceback) ... ok
+test_el_login_se_muestra_antes_que_el_menu (pruebas_autenticacion.PruebasIntegracionMain.test_el_login_se_muestra_antes_que_el_menu) ... ok
+test_registro_busqueda_y_actualizacion_tras_iniciar_sesion (pruebas_autenticacion.PruebasIntegracionMain.test_registro_busqueda_y_actualizacion_tras_iniciar_sesion) ... ok
+test_sin_credenciales_correctas_no_se_muestra_el_menu (pruebas_autenticacion.PruebasIntegracionMain.test_sin_credenciales_correctas_no_se_muestra_el_menu) ... ok
+test_al_registrar_valor_con_barra_no_incorpora_registro (pruebas_avance_ef.PruebasAvanceEF.test_al_registrar_valor_con_barra_no_incorpora_registro) ... ok
+test_carga_detecta_duplicado_con_espacio_en_codigo (pruebas_avance_ef.PruebasAvanceEF.test_carga_detecta_duplicado_con_espacio_en_codigo) ... ok
+test_carga_normaliza_codigo_con_espacios_sin_perder_busqueda (pruebas_avance_ef.PruebasAvanceEF.test_carga_normaliza_codigo_con_espacios_sin_perder_busqueda) ... ok
+test_fallo_guardado_no_permite_salir_sin_aviso_y_reintento_manual (pruebas_avance_ef.PruebasAvanceEF.test_fallo_guardado_no_permite_salir_sin_aviso_y_reintento_manual) ... ok
+test_guardado_invalido_no_modifica_archivo_principal (pruebas_avance_ef.PruebasAvanceEF.test_guardado_invalido_no_modifica_archivo_principal) ... ok
+test_guardado_rechaza_codigos_duplicados_normalizados (pruebas_avance_ef.PruebasAvanceEF.test_guardado_rechaza_codigos_duplicados_normalizados) ... ok
+test_ordenar_cambia_y_guarda_antes_de_salir (pruebas_avance_ef.PruebasAvanceEF.test_ordenar_cambia_y_guarda_antes_de_salir) ... ok
+test_ordenar_ya_ordenado_no_guarda_sin_cambios (pruebas_avance_ef.PruebasAvanceEF.test_ordenar_ya_ordenado_no_guarda_sin_cambios) ... ok
+test_rechaza_saltos_y_tab_independientemente_del_campo (pruebas_avance_ef.PruebasAvanceEF.test_rechaza_saltos_y_tab_independientemente_del_campo) ... ok
+test_rechaza_separador_en_campo (pruebas_avance_ef.PruebasAvanceEF.test_rechaza_separador_en_campo) ... ok
+test_recuperacion_documentada_desde_respaldo (pruebas_avance_ef.PruebasAvanceEF.test_recuperacion_documentada_desde_respaldo) ... ok
+test_reintento_automatico_al_salir_tras_fallo (pruebas_avance_ef.PruebasAvanceEF.test_reintento_automatico_al_salir_tras_fallo) ... ok
+test_reintento_fallido_mantiene_menu_abierto (pruebas_avance_ef.PruebasAvanceEF.test_reintento_fallido_mantiene_menu_abierto) ... ok
+test_resumen_por_estado (pruebas_avance_ef.PruebasAvanceEF.test_resumen_por_estado) ... ok
+test_ctrl_c_durante_el_reintento_tambien_informa_el_error (pruebas_cierre.PruebasCtrlCConPendientes.test_ctrl_c_durante_el_reintento_tambien_informa_el_error) ... ok
+test_reintenta_guardar_y_conserva_los_cambios (pruebas_cierre.PruebasCtrlCConPendientes.test_reintenta_guardar_y_conserva_los_cambios) ... ok
+test_si_el_reintento_falla_informa_y_no_sale_como_normal (pruebas_cierre.PruebasCtrlCConPendientes.test_si_el_reintento_falla_informa_y_no_sale_como_normal) ... ok
+test_sin_cambios_pendientes_no_reintenta_y_sale_normal (pruebas_cierre.PruebasCtrlCConPendientes.test_sin_cambios_pendientes_no_reintenta_y_sale_normal) ... ok
+test_el_login_simulado_se_usa_en_lugar_del_real (pruebas_cierre.PruebasEjecutarSinContrasena.test_el_login_simulado_se_usa_en_lugar_del_real) ... ok
+test_el_menu_funciona_con_login_simulado_y_sin_pedir_contrasena (pruebas_cierre.PruebasEjecutarSinContrasena.test_el_menu_funciona_con_login_simulado_y_sin_pedir_contrasena) ... ok
+test_main_devuelve_error_si_no_puede_cargar_los_datos (pruebas_cierre.PruebasEjecutarSinContrasena.test_main_devuelve_error_si_no_puede_cargar_los_datos) ... ok
+test_eof_al_preguntar_si_reintentar_en_la_salida (pruebas_cierre.PruebasFinDeEntradaConPendientes.test_eof_al_preguntar_si_reintentar_en_la_salida) ... ok
+test_reintenta_guardar_y_termina_normal_si_funciona (pruebas_cierre.PruebasFinDeEntradaConPendientes.test_reintenta_guardar_y_termina_normal_si_funciona) ... ok
+test_si_el_reintento_falla_no_presenta_salida_normal (pruebas_cierre.PruebasFinDeEntradaConPendientes.test_si_el_reintento_falla_no_presenta_salida_normal) ... ok
+test_sin_pendientes_termina_normal (pruebas_cierre.PruebasFinDeEntradaConPendientes.test_sin_pendientes_termina_normal) ... ok
+test_cp01_matriculas (pruebas_filtros.PruebasFiltros.test_cp01_matriculas) ... ok
+test_cp02_constancias (pruebas_filtros.PruebasFiltros.test_cp02_constancias) ... ok
+test_cp03_pendientes (pruebas_filtros.PruebasFiltros.test_cp03_pendientes) ... ok
+test_cp04_combinacion (pruebas_filtros.PruebasFiltros.test_cp04_combinacion) ... ok
+test_cp05_sin_coincidencias (pruebas_filtros.PruebasFiltros.test_cp05_sin_coincidencias) ... ok
+test_cp06_normaliza_criterios (pruebas_filtros.PruebasFiltros.test_cp06_normaliza_criterios) ... ok
+test_cp06_normaliza_valores_almacenados (pruebas_filtros.PruebasFiltros.test_cp06_normaliza_valores_almacenados) ... ok
+test_cp07_lista_vacia (pruebas_filtros.PruebasFiltros.test_cp07_lista_vacia) ... ok
+test_cp08_persistencia (pruebas_filtros.PruebasFiltros.test_cp08_persistencia) ... ok
+test_cp09_no_modifica_datos_ni_orden (pruebas_filtros.PruebasFiltros.test_cp09_no_modifica_datos_ni_orden) ... ok
+test_criterios_vacios_devuelven_lista_nueva (pruebas_filtros.PruebasFiltros.test_criterios_vacios_devuelven_lista_nueva) ... ok
+test_tipo_personalizado_sigue_admitido (pruebas_filtros.PruebasFiltros.test_tipo_personalizado_sigue_admitido) ... ok
+test_todos_los_estados (pruebas_filtros.PruebasFiltros.test_todos_los_estados) ... ok
+test_consulta_combinada_muestra_solo_coincidencias (pruebas_filtros.PruebasIntegracionFiltros.test_consulta_combinada_muestra_solo_coincidencias) ... ok
+test_consulta_rapida_lista_vacia (pruebas_filtros.PruebasIntegracionFiltros.test_consulta_rapida_lista_vacia) ... ok
+test_consulta_rapida_pendientes (pruebas_filtros.PruebasIntegracionFiltros.test_consulta_rapida_pendientes) ... ok
+test_consulta_rapida_sin_pendientes (pruebas_filtros.PruebasIntegracionFiltros.test_consulta_rapida_sin_pendientes) ... ok
+test_estado_invalido (pruebas_filtros.PruebasIntegracionFiltros.test_estado_invalido) ... ok
+test_lista_vacia_informa_sin_solicitar_entradas (pruebas_filtros.PruebasIntegracionFiltros.test_lista_vacia_informa_sin_solicitar_entradas) ... ok
+test_mensaje_sin_coincidencias (pruebas_filtros.PruebasIntegracionFiltros.test_mensaje_sin_coincidencias) ... ok
+test_menu_consultas_no_escriben_archivo_y_funcionan_tras_reinicio (pruebas_filtros.PruebasIntegracionFiltros.test_menu_consultas_no_escriben_archivo_y_funcionan_tras_reinicio) ... ok
+test_fallo_al_crear_temporal_conserva_original (pruebas_guardado_seguro.PruebasGuardadoSeguro.test_fallo_al_crear_temporal_conserva_original) ... ok
+test_fallo_al_reemplazar_principal_conserva_original (pruebas_guardado_seguro.PruebasGuardadoSeguro.test_fallo_al_reemplazar_principal_conserva_original) ... ok
+test_fallo_al_reemplazar_respaldo_conserva_ambos (pruebas_guardado_seguro.PruebasGuardadoSeguro.test_fallo_al_reemplazar_respaldo_conserva_ambos) ... ok
+test_fallo_de_escritura_parcial_conserva_original (pruebas_guardado_seguro.PruebasGuardadoSeguro.test_fallo_de_escritura_parcial_conserva_original) ... ok
+test_fallo_de_sincronizacion_conserva_original (pruebas_guardado_seguro.PruebasGuardadoSeguro.test_fallo_de_sincronizacion_conserva_original) ... ok
+test_fallo_inicial_no_publica_archivo_incompleto (pruebas_guardado_seguro.PruebasGuardadoSeguro.test_fallo_inicial_no_publica_archivo_incompleto) ... ok
+test_guardado_y_respaldo_exacto (pruebas_guardado_seguro.PruebasGuardadoSeguro.test_guardado_y_respaldo_exacto) ... ok
+test_lista_vacia_guarda_y_respalda (pruebas_guardado_seguro.PruebasGuardadoSeguro.test_lista_vacia_guarda_y_respalda) ... ok
+test_primera_escritura_no_crea_respaldo_inexistente (pruebas_guardado_seguro.PruebasGuardadoSeguro.test_primera_escritura_no_crea_respaldo_inexistente) ... ok
+test_respaldo_se_actualiza_a_version_inmediatamente_anterior (pruebas_guardado_seguro.PruebasGuardadoSeguro.test_respaldo_se_actualiza_a_version_inmediatamente_anterior) ... ok
+test_archivo_con_campo_largo_se_carga_y_se_guarda_sin_truncar (pruebas_mejoras.PruebasMejoras.test_archivo_con_campo_largo_se_carga_y_se_guarda_sin_truncar) ... ok
+test_carga_acepta_estado_en_minusculas_y_lo_normaliza (pruebas_mejoras.PruebasMejoras.test_carga_acepta_estado_en_minusculas_y_lo_normaliza) ... ok
+test_carga_detecta_duplicados_con_la_misma_regla_de_codigos (pruebas_mejoras.PruebasMejoras.test_carga_detecta_duplicados_con_la_misma_regla_de_codigos) ... ok
+test_carga_sigue_rechazando_estado_desconocido (pruebas_mejoras.PruebasMejoras.test_carga_sigue_rechazando_estado_desconocido) ... ok
+test_carga_tolera_espacios_alrededor_del_separador (pruebas_mejoras.PruebasMejoras.test_carga_tolera_espacios_alrededor_del_separador) ... ok
+test_codigo_con_espacios_internos_en_archivo_se_busca_y_no_se_altera (pruebas_mejoras.PruebasMejoras.test_codigo_con_espacios_internos_en_archivo_se_busca_y_no_se_altera) ... ok
+test_codigo_con_espacios_se_encuentra_con_cualquier_escritura (pruebas_mejoras.PruebasMejoras.test_codigo_con_espacios_se_encuentra_con_cualquier_escritura) ... ok
+test_codigo_vacio_se_rechaza_sin_pedir_mas_datos (pruebas_mejoras.PruebasMejoras.test_codigo_vacio_se_rechaza_sin_pedir_mas_datos) ... ok
+test_filtro_por_tipo_ignora_tildes (pruebas_mejoras.PruebasMejoras.test_filtro_por_tipo_ignora_tildes) ... ok
+test_orden_natural_con_codigos_mixtos_no_falla (pruebas_mejoras.PruebasMejoras.test_orden_natural_con_codigos_mixtos_no_falla) ... ok
+test_orden_natural_por_codigo (pruebas_mejoras.PruebasMejoras.test_orden_natural_por_codigo) ... ok
+test_ordenar_en_el_menu_muestra_la_lista (pruebas_mejoras.PruebasMejoras.test_ordenar_en_el_menu_muestra_la_lista) ... ok
+test_registro_normaliza_espacios_internos (pruebas_mejoras.PruebasMejoras.test_registro_normaliza_espacios_internos) ... ok
+test_registro_nuevo_respeta_el_limite_de_longitud (pruebas_mejoras.PruebasMejoras.test_registro_nuevo_respeta_el_limite_de_longitud) ... ok
+test_registro_rechaza_duplicado_con_distintos_espacios_o_mayusculas (pruebas_mejoras.PruebasMejoras.test_registro_rechaza_duplicado_con_distintos_espacios_o_mayusculas) ... ok
+test_validar_datos_no_aplica_limite_a_datos_existentes (pruebas_mejoras.PruebasMejoras.test_validar_datos_no_aplica_limite_a_datos_existentes) ... ok
+test_validar_longitudes_directo (pruebas_mejoras.PruebasMejoras.test_validar_longitudes_directo) ... ok
+test_codigo_inexistente_informa_y_regresa_al_menu (pruebas_menu.PruebasConsultaUnificada.test_codigo_inexistente_informa_y_regresa_al_menu) ... ok
+test_consulta_por_codigo_muestra_documento_completo (pruebas_menu.PruebasConsultaUnificada.test_consulta_por_codigo_muestra_documento_completo) ... ok
+test_archivo_con_bom_se_carga_y_se_encuentra_el_primer_codigo (pruebas_revision.PruebasRevision.test_archivo_con_bom_se_carga_y_se_encuentra_el_primer_codigo) ... ok
+test_ctrl_c_a_mitad_de_registro_no_pierde_lo_guardado (pruebas_revision.PruebasRevision.test_ctrl_c_a_mitad_de_registro_no_pierde_lo_guardado) ... ok
+test_ctrl_d_en_el_menu_sale_sin_traceback (pruebas_revision.PruebasRevision.test_ctrl_d_en_el_menu_sale_sin_traceback) ... ok
+test_estado_persiste_al_cerrar_y_reabrir (pruebas_revision.PruebasRevision.test_estado_persiste_al_cerrar_y_reabrir) ... ok
+test_fecha_con_digitos_no_ascii_se_rechaza (pruebas_revision.PruebasRevision.test_fecha_con_digitos_no_ascii_se_rechaza) ... ok
+test_mismo_estado_no_cuenta_como_cambio (pruebas_revision.PruebasRevision.test_mismo_estado_no_cuenta_como_cambio) ... ok
+test_mismo_estado_no_reescribe_ni_pisa_el_respaldo (pruebas_revision.PruebasRevision.test_mismo_estado_no_reescribe_ni_pisa_el_respaldo) ... ok
+test_ruta_de_datos_no_depende_de_la_carpeta_de_ejecucion (pruebas_revision.PruebasRevision.test_ruta_de_datos_no_depende_de_la_carpeta_de_ejecucion) ... ok
+test_detecta_codigos_duplicados_sin_distinguir_mayusculas (pruebas_semana10.PruebasIntegridadArchivos.test_detecta_codigos_duplicados_sin_distinguir_mayusculas) ... ok
+test_detecta_fecha_invalida_y_campos_vacios (pruebas_semana10.PruebasIntegridadArchivos.test_detecta_fecha_invalida_y_campos_vacios) ... ok
+test_detecta_lineas_con_cantidad_incorrecta_de_campos (pruebas_semana10.PruebasIntegridadArchivos.test_detecta_lineas_con_cantidad_incorrecta_de_campos) ... ok
+test_error_de_lectura_impide_abrir_menu (pruebas_semana10.PruebasIntegridadArchivos.test_error_de_lectura_impide_abrir_menu) ... ok
+test_guardado_manual_informa_error_sin_finalizar (pruebas_semana10.PruebasIntegridadArchivos.test_guardado_manual_informa_error_sin_finalizar) ... ok
+test_salir_cierra_sin_guardar_ni_modificar_archivo (pruebas_semana10.PruebasIntegridadArchivos.test_salir_cierra_sin_guardar_ni_modificar_archivo) ... ok
+test_busqueda_independiente_de_mayusculas (pruebas_semana8.PruebasIntegracionBasica.test_busqueda_independiente_de_mayusculas) ... ok
+test_busqueda_sin_resultado (pruebas_semana8.PruebasIntegracionBasica.test_busqueda_sin_resultado) ... ok
+test_crear_archivo_que_no_existe (pruebas_semana8.PruebasIntegracionBasica.test_crear_archivo_que_no_existe) ... ok
+test_criterio_ordenamiento_invalido (pruebas_semana8.PruebasIntegracionBasica.test_criterio_ordenamiento_invalido) ... ok
+test_guardar_y_cargar_archivo (pruebas_semana8.PruebasIntegracionBasica.test_guardar_y_cargar_archivo) ... ok
+test_ordenamiento_por_codigo (pruebas_semana8.PruebasIntegracionBasica.test_ordenamiento_por_codigo) ... ok
+test_ordenamiento_por_fecha (pruebas_semana8.PruebasIntegracionBasica.test_ordenamiento_por_fecha) ... ok
+test_rechaza_campo_obligatorio_vacio (pruebas_semana8.PruebasIntegracionBasica.test_rechaza_campo_obligatorio_vacio) ... ok
+test_rechaza_fecha_formato_incorrecto (pruebas_semana8.PruebasIntegracionBasica.test_rechaza_fecha_formato_incorrecto) ... ok
+test_rechaza_fecha_inexistente (pruebas_semana8.PruebasIntegracionBasica.test_rechaza_fecha_inexistente) ... ok
+test_registro_correcto (pruebas_semana8.PruebasIntegracionBasica.test_registro_correcto) ... ok
+test_registro_duplicado (pruebas_semana8.PruebasIntegracionBasica.test_registro_duplicado) ... ok
+test_error_de_guardado_se_informa_sin_cerrar_el_programa (pruebas_semana9.PruebasGuardadoAutomatico.test_error_de_guardado_se_informa_sin_cerrar_el_programa) ... ok
+test_guarda_al_actualizar_sin_pulsar_guardar_ni_salir (pruebas_semana9.PruebasGuardadoAutomatico.test_guarda_al_actualizar_sin_pulsar_guardar_ni_salir) ... ok
+test_guarda_al_registrar_sin_pulsar_guardar_ni_salir (pruebas_semana9.PruebasGuardadoAutomatico.test_guarda_al_registrar_sin_pulsar_guardar_ni_salir) ... ok
+test_no_guarda_despues_de_actualizacion_invalida (pruebas_semana9.PruebasGuardadoAutomatico.test_no_guarda_despues_de_actualizacion_invalida) ... ok
+test_no_guarda_despues_de_registro_invalido (pruebas_semana9.PruebasGuardadoAutomatico.test_no_guarda_despues_de_registro_invalido) ... ok
+
+----------------------------------------------------------------------
+Ran 142 tests in 0.615s
+
+OK
+
+--- ACTUALIZACIÓN DE ESTADO ---
+Estado actual: Pendiente
+1. Pendiente
+2. En proceso
+3. Atendido
+Estado actualizado a 'En proceso'.
+
+--- ACTUALIZACIÓN DE ESTADO ---
+No se encontró un documento con ese código.
+
+--- ACTUALIZACIÓN DE ESTADO ---
+Estado actual: Pendiente
+1. Pendiente
+2. En proceso
+3. Atendido
+Opción de estado no válida.
+Criterio no válido. Use 'codigo' o 'fecha'.
+
+--- REGISTRO DE DOCUMENTO ---
+Documento 'DOC-901' registrado correctamente con estado 'Pendiente'.
+
+--- REGISTRO DE DOCUMENTO ---
+Ya existe un documento registrado con el código 'doc-901'.

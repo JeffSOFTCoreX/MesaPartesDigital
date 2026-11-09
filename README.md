@@ -30,12 +30,14 @@ MesaPartesDigital/
 ├── registro.py            # Registro de expedientes
 ├── validacion.py          # Validación de campos, fechas y estados
 ├── busqueda.py            # Búsqueda por código
+├── normalizacion.py       # Regla compartida de comparación de códigos
 ├── consulta.py            # Consulta, filtrado y visualización
 ├── actualizacion.py       # Cambios de estado
 ├── archivo.py             # Lectura, validación, ordenamiento y guardado
 ├── pruebas_autenticacion.py # 31 pruebas de inicio y cierre de sesión
 ├── pruebas_cierre.py      # 11 pruebas de cierre con cambios pendientes (Ctrl+C / fin de entrada)
 ├── pruebas_revision.py    # 8 pruebas de la revisión y corrección de errores
+├── pruebas_mejoras.py     # 17 pruebas de mejoras y compatibilidad
 ├── pruebas_menu.py        # 2 pruebas de consulta unificada
 ├── pruebas_filtros.py     # 21 pruebas de filtros e integración
 ├── pruebas.py             # 5 pruebas iniciales
@@ -101,8 +103,10 @@ python -m unittest discover -p "pruebas*.py" -v
 | `pruebas_revision.py` | 8 |
 | `pruebas_autenticacion.py` | 31 |
 | `pruebas_cierre.py` | 11 |
+| `pruebas_mejoras.py` | 17 |
+| **Total de la versión integrada validada** | **142** |
 
-El total de pruebas depende de las ramas integradas, por lo que no se fija aquí: se obtiene al ejecutar el comando anterior y su resultado real (cantidad, commit y `OK`) se registra en las evidencias de la integración final.
+La versión integrada del commit `ae08ba8645a32ca4424f0ec8136c8ef58ef57492` fue validada con **142 pruebas aprobadas, 0 fallos y 0 errores**. El registro completo y las capturas están en [evidencias de integración final](docs/evidencias_integrante3/README.md). Las cantidades de 28, 61, 75, 83, 100, 114, 117 o 125 citadas en documentos históricos corresponden a etapas o conjuntos anteriores; no son el total final. Si se modifica el código, debe ejecutarse nuevamente la suite y registrar el commit comprobado.
 
 La ejecución documentada para la Evaluación Parcial terminó con **28 pruebas aprobadas (`OK`)**. Entre otras situaciones, se comprueban la validación de fechas, los códigos duplicados, el guardado automático, la recuperación de expedientes y el manejo de errores de archivo.
 
@@ -113,8 +117,8 @@ en un criterio para no restringirlo; ambos vacíos muestran todos los registros.
 Por ejemplo, `Matrícula` y `Pendiente` muestran únicamente matrículas pendientes.
 También se admiten los demás tipos registrados, sin restringir los anteriores.
 
-Las comparaciones ignoran mayúsculas, minúsculas y espacios sobrantes al inicio,
-al final y entre palabras. Se mantienen los acentos: escribe `Matrícula` con tilde.
+Las comparaciones ignoran mayúsculas, minúsculas, tildes y espacios sobrantes al inicio,
+al final y entre palabras. Por ejemplo, `Matrícula` y `matricula` coinciden.
 Los estados admitidos se reutilizan del módulo de actualización; un estado
 desconocido muestra un aviso y regresa al menú.
 
@@ -123,8 +127,8 @@ no cambian estados, no reordenan registros ni escriben en el archivo. Si la list
 está vacía o no hay coincidencias, se muestra el mensaje correspondiente.
 
 Ver [el registro de revisión](docs/revision_filtros.md),
-[los resultados de pruebas](docs/resultados_pruebas.txt) y
-[la demostración reproducida en consola](docs/demostracion_filtros.txt).
+[los resultados finales de pruebas](docs/evidencias_integrante3/00_resultado_pruebas_automatizadas.txt) y
+[las capturas y su alcance](docs/evidencias_integrante3/README.md).
 
 ## Control de versiones
 
@@ -140,9 +144,7 @@ El repositorio conserva los commits anteriores para documentar la evolución del
 Las demostraciones y pruebas deben ejecutarse con **datos ficticios**. No publiques archivos de expedientes reales, números de documentos, teléfonos ni otros datos personales. La inclusión de `documentos.txt` en `.gitignore` evita incorporaciones nuevas cuando el archivo ya no está bajo seguimiento, pero no elimina versiones antiguas del historial de Git.
 
 La entrega revisada del 26/10/2026 parte del ZIP proporcionado, que no incluye
-la carpeta `.git`. No se generaron commits ni se publicó en GitHub. El archivo
-`docs/cambios_filtros.patch` permite revisar las diferencias de texto respecto
-del código del ZIP original. Las 61 pruebas de esta revisión terminaron en `OK`.
+la carpeta `.git`. No se generaron commits ni se publicó en GitHub. Las 61 pruebas de aquella revisión terminaron en `OK`; corresponden a esa etapa histórica, no al total final.
 
 ## Consulta unificada y guía del desafío
 
@@ -172,7 +174,7 @@ El menú principal muestra un encabezado del sistema y un resumen actualizado de
 
 ## Revisión del sistema y corrección de errores
 
-Se revisaron menú, registro, búsquedas, actualización de estados, almacenamiento, validaciones y persistencia, y se corrigieron cinco errores sin eliminar funcionalidades (ver `RESUMEN_REVISION.md`). Total: **83 pruebas en `OK`**.
+Se incorporaron las correcciones de menú, registro, búsquedas, actualización de estados, almacenamiento, validaciones y persistencia descritas en [el resumen de revisión](docs/RESUMEN_REVISION.md). Las 25 pruebas de ese aporte forman parte de las **142 pruebas de la versión integrada**, junto con las pruebas originales, de autenticación y de cierre con errores de guardado.
 
 ## Inicio de sesión del administrador
 
@@ -186,3 +188,8 @@ Al ejecutar `main.py` se solicita usuario y contraseña **antes** de mostrar el 
 - **Contraseña olvidada:** borrar `credenciales.json` y volver a configurar la cuenta (los expedientes no se modifican).
 
 **Límites:** hay un solo administrador, sin roles. El bloqueo por intentos vale por ejecución del programa (no persiste si se reinicia). Quien tenga acceso al equipo puede borrar `credenciales.json`; es una protección de acceso al programa, no cifrado de `documentos.txt`.
+
+
+## Alcance del modelo PSeInt
+
+El archivo `PSeInt/MesaPartesDigital_AvanceEF.psc` y sus capturas documentan el modelo académico anterior de nueve opciones, sin autenticación y con guardado simulado en memoria. La implementación final ejecutable es la versión Python con inicio de sesión y diez opciones; las capturas del modelo previo se conservan como antecedentes.

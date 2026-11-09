@@ -1,0 +1,7 @@
+EVIDENCIAS DE INTEGRACIÓN FINAL — 09/11/2026
+
+Las capturas 07 y 08 son imágenes directas de la ventana Xterm, con fondo blanco, durante la validación de la rama main en el commit ae08ba8645a32ca4424f0ec8136c8ef58ef57492. Se usaron Xvfb y Scrot. La captura 07 documenta la compilación; la 08 documenta los comandos y el resultado de las 142 pruebas.
+
+El archivo 00_resultado_pruebas_automatizadas.txt contiene la salida detallada completa de la ejecución automatizada sobre ese commit.
+
+La imagen HISTORICA_06_resultado_114_pruebas_2026-11-09.png pertenece a una ejecución previa de 114 pruebas y se conserva solo por trazabilidad. No debe confundirse con la validación final. Las imágenes 01 a 05 documentan flujos funcionales de una ronda anterior y tampoco son evidencia del resultado de pruebas del hash final.
