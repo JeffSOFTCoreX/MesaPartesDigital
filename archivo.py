@@ -5,6 +5,7 @@ import re
 import tempfile
 
 from validacion import validar_datos
+from normalizacion import clave_codigo
 
 SEPARADOR = "|"
 CAMPOS = ["codigo", "tipo_documento", "estudiante", "fecha", "estado"]
@@ -50,7 +51,7 @@ def guardar_archivo(registros, ruta="documentos.txt"):
         valido, mensaje = validar_datos(registro)
         if not valido:
             raise ValueError(f"Registro {numero} inválido: {mensaje}")
-        codigo = registro["codigo"].strip().casefold()
+        codigo = clave_codigo(registro["codigo"])
         if codigo in codigos:
             raise ValueError(f"Código duplicado en el registro {numero}: {registro['codigo']}")
         codigos.add(codigo)
@@ -114,9 +115,10 @@ def cargar_archivo(ruta="documentos.txt"):
             registro = {campo: valor.strip() for campo, valor in zip(CAMPOS, partes)}
             registro["estado"] = _estado_canonico(registro["estado"])
             valido, _ = validar_datos(registro)
-            # El código tiene la misma normalización en carga, registro y búsqueda.
+            # Misma regla de comparación de códigos en carga, registro y búsqueda
+            # (normalizacion.clave_codigo). El valor guardado no se altera.
             registro["codigo"] = registro["codigo"].strip()
-            codigo_normalizado = registro["codigo"].casefold()
+            codigo_normalizado = clave_codigo(registro["codigo"])
             if not valido or codigo_normalizado in codigos:
                 omitidos += 1
                 continue

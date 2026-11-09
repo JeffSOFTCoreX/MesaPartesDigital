@@ -1,16 +1,12 @@
-from validacion import validar_datos
+from validacion import validar_datos, validar_longitudes
 from busqueda import buscar_documento
-
-
-def _limpiar(texto):
-    """Quita espacios sobrantes al inicio, al final y entre palabras."""
-    return " ".join(texto.split())
+from normalizacion import limpiar_texto
 
 
 def registrar_documento(registros):
     print("\n--- REGISTRO DE DOCUMENTO ---")
 
-    codigo = _limpiar(input("Código: "))
+    codigo = limpiar_texto(input("Código: "))
 
     if not codigo:
         print("No se pudo registrar: El campo 'codigo' es obligatorio.")
@@ -20,8 +16,8 @@ def registrar_documento(registros):
         print(f"Ya existe un documento registrado con el código '{codigo}'.")
         return False
 
-    tipo_documento = _limpiar(input("Tipo de documento: "))
-    estudiante = _limpiar(input("Nombre del estudiante/usuario: "))
+    tipo_documento = limpiar_texto(input("Tipo de documento: "))
+    estudiante = limpiar_texto(input("Nombre del estudiante/usuario: "))
     fecha = input("Fecha (DD/MM/AAAA): ").strip()
     estado = "Pendiente"
 
@@ -34,6 +30,10 @@ def registrar_documento(registros):
     }
 
     valido, mensaje = validar_datos(datos)
+    if valido:
+        # El límite de longitud se aplica solo a registros NUEVOS: los datos
+        # existentes en documentos.txt se cargan y guardan sin truncarse.
+        valido, mensaje = validar_longitudes(datos)
 
     if not valido:
         print(f"No se pudo registrar: {mensaje}")
