@@ -2,17 +2,26 @@ from validacion import validar_datos
 from busqueda import buscar_documento
 
 
+def _limpiar(texto):
+    """Quita espacios sobrantes al inicio, al final y entre palabras."""
+    return " ".join(texto.split())
+
+
 def registrar_documento(registros):
     print("\n--- REGISTRO DE DOCUMENTO ---")
 
-    codigo = input("Código: ").strip()
+    codigo = _limpiar(input("Código: "))
+
+    if not codigo:
+        print("No se pudo registrar: El campo 'codigo' es obligatorio.")
+        return False
 
     if buscar_documento(registros, codigo):
         print(f"Ya existe un documento registrado con el código '{codigo}'.")
         return False
 
-    tipo_documento = input("Tipo de documento: ").strip()
-    estudiante = input("Nombre del estudiante/usuario: ").strip()
+    tipo_documento = _limpiar(input("Tipo de documento: "))
+    estudiante = _limpiar(input("Nombre del estudiante/usuario: "))
     fecha = input("Fecha (DD/MM/AAAA): ").strip()
     estado = "Pendiente"
 
