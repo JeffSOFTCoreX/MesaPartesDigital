@@ -17,6 +17,7 @@ El proyecto utiliza como caso de estudio la gestión documental de la **Academia
 | 7 | Ordenar registros por código o fecha. |
 | 8 | Guardar manualmente los registros. |
 | 9 | Salir del programa sin ejecutar un guardado adicional. |
+| 10 | Cerrar sesión del administrador y volver al inicio de sesión. |
 
 Los estados admitidos son **Pendiente**, **En proceso** y **Atendido**.
 
@@ -24,13 +25,17 @@ Los estados admitidos son **Pendiente**, **En proceso** y **Atendido**.
 
 ```text
 MesaPartesDigital/
-├── main.py                # Menú e integración de funciones
+├── main.py                # Inicio de sesión, menú e integración de funciones
+├── autenticacion.py       # Acceso del administrador (hash, intentos, configuración)
 ├── registro.py            # Registro de expedientes
 ├── validacion.py          # Validación de campos, fechas y estados
 ├── busqueda.py            # Búsqueda por código
 ├── consulta.py            # Consulta, filtrado y visualización
 ├── actualizacion.py       # Cambios de estado
 ├── archivo.py             # Lectura, validación, ordenamiento y guardado
+├── pruebas_autenticacion.py # 31 pruebas de inicio y cierre de sesión
+├── pruebas_cierre.py      # 11 pruebas de cierre con cambios pendientes (Ctrl+C / fin de entrada)
+├── pruebas_revision.py    # 8 pruebas de la revisión y corrección de errores
 ├── pruebas_menu.py        # 2 pruebas de consulta unificada
 ├── pruebas_filtros.py     # 21 pruebas de filtros e integración
 ├── pruebas.py             # 5 pruebas iniciales
@@ -42,7 +47,7 @@ MesaPartesDigital/
 └── .gitignore
 ```
 
-`documentos.txt` se crea en la carpeta desde la que se ejecuta el programa si todavía no existe. Es un archivo de datos de uso local y **no debe subirse a GitHub con expedientes personales**.
+`documentos.txt` se crea junto a `main.py` (sin importar desde qué carpeta se ejecute el programa) si todavía no existe. Es un archivo de datos de uso local y **no debe subirse a GitHub con expedientes personales**.
 
 ## Requisitos y ejecución
 
@@ -52,8 +57,11 @@ MesaPartesDigital/
 Desde la carpeta del proyecto:
 
 ```bash
-python main.py
+python autenticacion.py   # una sola vez: crear la cuenta del administrador
+python main.py            # inicia con usuario y contraseña
 ```
+
+Véase [Inicio de sesión del administrador](#inicio-de-sesión-del-administrador).
 
 Cada expediente contiene cinco campos: código, tipo de documento, estudiante/usuario, fecha (`DD/MM/AAAA`) y estado. Los registros se almacenan en `documentos.txt` separados por `|`.
 
@@ -68,7 +76,7 @@ Cada expediente contiene cinco campos: código, tipo de documento, estudiante/us
 
 **Guardado protegido:** se escribe un temporal en la misma carpeta, se vacía el búfer y se ejecuta `os.fsync`. Si existe el archivo principal, su contenido anterior se conserva en `documentos.txt.bak` mediante otro reemplazo completo. Finalmente se utiliza `os.replace` para sustituir el principal. Un fallo al escribir, sincronizar o preparar el respaldo aborta el guardado; un fallo al reemplazar el principal se informa para reintentar.
 
-**Límites:** no garantiza protección absoluta frente a daños físicos, cortes de energía, eliminación externa ni escritores simultáneos. El respaldo conserva una sola versión previa, no un historial. No se sincroniza explícitamente el directorio y las garantías finales dependen del sistema de archivos y el hardware. El prototipo tampoco implementa autenticación, permisos de usuario ni notificaciones electrónicas.
+**Límites:** no garantiza protección absoluta frente a daños físicos, cortes de energía, eliminación externa ni escritores simultáneos. El respaldo conserva una sola versión previa, no un historial. No se sincroniza explícitamente el directorio y las garantías finales dependen del sistema de archivos y el hardware. El prototipo implementa un único administrador (sin roles ni permisos diferenciados) y no envía notificaciones electrónicas.
 
 Ver [procedimiento y recuperación](docs/guardado_seguro.md).
 
@@ -90,7 +98,11 @@ python -m unittest discover -p "pruebas*.py" -v
 | `pruebas_guardado_seguro.py` | 10 |
 | `pruebas_menu.py` | 2 |
 | `pruebas_avance_ef.py` | 14 |
-| **Total del avance hacia EF** | **75** |
+| `pruebas_revision.py` | 8 |
+| `pruebas_autenticacion.py` | 31 |
+| `pruebas_cierre.py` | 11 |
+
+El total de pruebas depende de las ramas integradas, por lo que no se fija aquí: se obtiene al ejecutar el comando anterior y su resultado real (cantidad, commit y `OK`) se registra en las evidencias de la integración final.
 
 La ejecución documentada para la Evaluación Parcial terminó con **28 pruebas aprobadas (`OK`)**. Entre otras situaciones, se comprueban la validación de fechas, los códigos duplicados, el guardado automático, la recuperación de expedientes y el manejo de errores de archivo.
 
@@ -150,4 +162,27 @@ adicionales del docente. La unificación conserva la funcionalidad requerida.
 
 Se corrigieron escenarios de integridad del texto delimitado, códigos con espacios al cargar, pérdida posible en salida normal tras fallo de guardado, y falta de persistencia del ordenamiento. Se añadió un conteo sencillo por estado a la consulta de pendientes. Las **75 pruebas automatizadas** terminaron en `OK` en la ejecución local. Véase [avance EF: detalles, pruebas y límites](docs/avance_ef_implementacion.md).
 
-El ZIP revisado no contiene `.git`; esta edición no crea ni publica commits. Para que el repositorio remoto refleje el avance, cada integrante debe revisar las modificaciones y realizar sus propios commits verificables.
+La rama `avance-ef-2026` fue integrada en `main` mediante el Pull Request #2. Los cuatro commits del avance quedaron publicados. Este paquete consolidado no contiene la carpeta `.git`; el historial verificable se consulta en el repositorio de GitHub.
+
+
+## Interfaz de consola
+
+El menú principal muestra un encabezado del sistema y un resumen actualizado de los expedientes por estado. Las opciones están agrupadas por gestión de documentos y administración. La interfaz utiliza únicamente funciones de la biblioteca estándar de Python, por lo que no requiere instalar paquetes adicionales.
+
+
+## Revisión del sistema y corrección de errores
+
+Se revisaron menú, registro, búsquedas, actualización de estados, almacenamiento, validaciones y persistencia, y se corrigieron cinco errores sin eliminar funcionalidades (ver `RESUMEN_REVISION.md`). Total: **83 pruebas en `OK`**.
+
+## Inicio de sesión del administrador
+
+Al ejecutar `main.py` se solicita usuario y contraseña **antes** de mostrar el menú. Si las credenciales son correctas se accede al menú principal; si son incorrectas el acceso se rechaza.
+
+- **Configurar la cuenta:** ejecutar `python autenticacion.py`, indicar el usuario y la contraseña (mínimo 8 caracteres) y repetirla. Si ya existe una cuenta, primero se pide la contraseña actual. Si se ejecuta `main.py` sin cuenta configurada, ofrece crearla en ese momento.
+- **Almacenamiento seguro:** la contraseña no está en el código ni se guarda en texto plano. Se guarda en `credenciales.json` (junto a `main.py`) solo el hash PBKDF2-HMAC-SHA256 (200 000 iteraciones) con una sal aleatoria. El archivo está en `.gitignore`.
+- **Límite de intentos:** 3 intentos por inicio de sesión; al agotarse, el programa termina. El mensaje de error es el mismo si falla el usuario o la contraseña.
+- **Cerrar sesión:** opción **10** del menú. Vuelve a pedir credenciales; los expedientes se conservan.
+- **Salida con cambios sin guardar:** si el guardado automático falló y se sale con Ctrl+C o con fin de entrada, el programa reintenta guardar. Si vuelve a fallar, muestra `ERROR: los cambios recientes NO se guardaron`, termina con `Programa finalizado con errores.` y devuelve el código de salida 1 (no se presenta como una salida normal).
+- **Contraseña olvidada:** borrar `credenciales.json` y volver a configurar la cuenta (los expedientes no se modifican).
+
+**Límites:** hay un solo administrador, sin roles. El bloqueo por intentos vale por ejecución del programa (no persiste si se reinicia). Quien tenga acceso al equipo puede borrar `credenciales.json`; es una protección de acceso al programa, no cifrado de `documentos.txt`.
