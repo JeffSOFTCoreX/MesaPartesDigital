@@ -24,7 +24,7 @@ Describe exactamente lo que contiene la rama. Cada cambio se probó antes (códi
 
 ## Pruebas
 - Pruebas propias de esta rama: **25** (`pruebas_revision.py`: 8, `pruebas_mejoras.py`: 17), ubicadas en la raíz junto a las demás para que las encuentre `python -m unittest discover -p "pruebas*.py"`.
-- Resultado total de la suite: **<anotar aquí el "Ran N tests ... OK" real tras integrar>**.
+- Resultado total de la suite: **Ran 100 tests ... OK** (comando: `py -m unittest discover -p "pruebas*.py"`, ejecutado sobre la rama `integrante2`).
 
 ## Funcionalidades revisadas (se conservan todas)
 Menú principal, registro, búsqueda por código, consulta por filtros, actualización de estados, ordenamiento, almacenamiento (temporal + `.bak`), validaciones y persistencia al cerrar y reabrir.
