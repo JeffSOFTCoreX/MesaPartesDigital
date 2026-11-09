@@ -1,5 +1,7 @@
 """Menú principal del prototipo de mesa de partes digital."""
 
+from pathlib import Path
+
 from archivo import cargar_archivo, guardar_archivo, ordenar_registros
 from registro import registrar_documento
 from busqueda import buscar_documento
@@ -9,7 +11,9 @@ from consulta import (
 )
 from actualizacion import actualizar_estado
 
-ARCHIVO_DATOS = "documentos.txt"
+# Ruta fija junto a main.py: los expedientes se encuentran sin importar
+# desde qué carpeta se ejecute el programa.
+ARCHIVO_DATOS = str(Path(__file__).resolve().parent / "documentos.txt")
 
 
 def guardar_automaticamente(registros):
@@ -24,17 +28,41 @@ def guardar_automaticamente(registros):
     return True
 
 
+def mostrar_encabezado(registros):
+    """Muestra el encabezado y un resumen actualizado de los expedientes."""
+    total = len(registros)
+    pendientes = sum(r["estado"] == "Pendiente" for r in registros)
+    en_proceso = sum(r["estado"] == "En proceso" for r in registros)
+    atendidos = sum(r["estado"] == "Atendido" for r in registros)
+
+    print("\n" + "=" * 62)
+    print("                 MESA DE PARTES DIGITAL")
+    print("                  ACADEMIA MAGNA PERPETUA")
+    print("=" * 62)
+    print(f"  Expedientes registrados : {total}")
+    print(f"  Pendientes              : {pendientes}")
+    print(f"  En proceso              : {en_proceso}")
+    print(f"  Atendidos               : {atendidos}")
+    print("-" * 62)
+
+
 def mostrar_menu():
-    print("\n=== MESA DE PARTES DIGITAL ===")
-    print("1. Registrar documento")
-    print("2. Consultar documento por código")
-    print("3. Mostrar todos los registros")
-    print("4. Consultar por tipo y/o estado")
-    print("5. Consultar expedientes pendientes y resumen")
-    print("6. Actualizar estado")
-    print("7. Ordenar registros")
-    print("8. Guardar registros")
-    print("9. Salir")
+    print("\n  MENÚ PRINCIPAL")
+    print("  " + "-" * 40)
+    print("  GESTIÓN DE DOCUMENTOS")
+    print("   [1] Registrar documento")
+    print("   [2] Consultar documento por código")
+    print("   [3] Mostrar todos los registros")
+    print("   [4] Consultar por tipo y/o estado")
+    print("   [5] Consultar expedientes pendientes")
+    print()
+    print("  ADMINISTRACIÓN")
+    print("   [6] Actualizar estado")
+    print("   [7] Ordenar registros")
+    print("   [8] Guardar registros")
+    print()
+    print("   [9] Salir")
+    print("  " + "-" * 40)
 
 
 def main():
@@ -48,8 +76,9 @@ def main():
     cambios_pendientes = False
 
     while True:
+        mostrar_encabezado(registros)
         mostrar_menu()
-        opcion = input("Seleccione una opción: ").strip()
+        opcion = input("\n  Seleccione una opción: ").strip()
 
         if opcion == "1":
             if registrar_documento(registros):
@@ -87,6 +116,7 @@ def main():
                 cambio_de_orden = registros_ordenados != registros
                 registros = registros_ordenados
                 print("Registros ordenados correctamente.")
+                mostrar_registros(registros)
                 if cambio_de_orden:
                     cambios_pendientes = True
                     if guardar_automaticamente(registros):
@@ -120,5 +150,15 @@ def main():
             print("Opción no válida. Intente nuevamente.")
 
 
+def ejecutar():
+    """Punto de entrada: Ctrl+C / Ctrl+D salen con un mensaje, sin traceback."""
+    try:
+        main()
+    except EOFError:
+        print("\nEntrada finalizada. Programa finalizado.")
+    except KeyboardInterrupt:
+        print("\nPrograma interrumpido por el usuario.")
+
+
 if __name__ == "__main__":
-    main()
+    ejecutar()

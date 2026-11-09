@@ -1,9 +1,14 @@
+import unicodedata
+
 from actualizacion import ESTADOS
 
 
 def normalizar_texto(texto):
-    """Ignora mayúsculas y espacios sobrantes, incluso entre palabras."""
-    return " ".join(texto.split()).casefold()
+    """Ignora mayúsculas, tildes y espacios sobrantes, incluso entre palabras."""
+    sin_tildes = "".join(
+        c for c in unicodedata.normalize("NFD", texto) if not unicodedata.combining(c)
+    )
+    return " ".join(sin_tildes.split()).casefold()
 
 
 def filtrar_expedientes(registros, tipo="", estado=""):
